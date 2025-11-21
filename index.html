@@ -9,159 +9,179 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Inter:wght@300;400;600;800&family=Tiro+Devanagari+Hindi&display=swap');
 
+        :root {
+            --card-aspect: 1; /* Changed to 1:1 Ratio */
+        }
+
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #020617; /* Slate 950 */
+            background-color: #020617;
             color: #e2e8f0;
             overflow: hidden;
         }
 
-        h1, h2, h3, .font-serif {
-            font-family: 'Cinzel', serif;
-        }
-
-        .font-hindi {
-            font-family: 'Tiro Devanagari Hindi', serif;
-        }
+        h1, h2, h3, .font-serif { font-family: 'Cinzel', serif; }
+        .font-hindi { font-family: 'Tiro Devanagari Hindi', serif; }
 
         /* Custom Scrollbar */
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 6px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: #0f172a;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #334155;
-            border-radius: 3px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #475569;
-        }
+        .custom-scrollbar::-webkit-scrollbar { width: 5px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.5); }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #475569; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #64748b; }
 
         /* Animations */
-        .fade-in { animation: fadeIn 0.5s ease-out forwards; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .fade-in { animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .zoom-in { animation: zoomIn 0.3s ease-out forwards; }
+        .zoom-in { animation: zoomIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         @keyframes zoomIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        .slide-up { animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        /* Background Animation */
+        .bg-animate { animation: bgMove 60s linear infinite alternate; }
+        @keyframes bgMove { 0% { transform: scale(1); } 100% { transform: scale(1.15); } }
 
         /* Glassmorphism */
         .glass {
-            background: rgba(15, 23, 42, 0.7);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(2, 6, 23, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         }
 
-        .blast-particle {
-            position: absolute;
+        .card-glass {
+            background: linear-gradient(180deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.95) 100%);
+            backdrop-filter: blur(8px);
+        }
+
+        /* Volume Slider Styling */
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 12px;
+            width: 12px;
             border-radius: 50%;
-            animation: blast 1s ease-out forwards;
+            background: #f59e0b;
+            cursor: pointer;
+            margin-top: -4px;
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+            transition: transform 0.1s;
+        }
+        input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.2); }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: #334155;
+            border-radius: 2px;
         }
 
-        @keyframes blast {
-            0% { transform: translate(0, 0) scale(1); opacity: 1; }
-            100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
-        }
-
-        /* Circular Progress (Donut) */
-        .circular-chart {
-            display: block;
-            margin: 0 auto;
-            max-width: 100%;
-            max-height: 250px;
-        }
-        .circle-bg {
-            fill: none;
-            stroke: #1e293b;
-            stroke-width: 2.5;
-        }
+        /* Circular Progress */
+        .circular-chart { display: block; margin: 0 auto; max-width: 100%; max-height: 250px; }
+        .circle-bg { fill: none; stroke: #1e293b; stroke-width: 2.5; }
         .circle {
-            fill: none;
-            stroke-width: 2.5;
-            stroke-linecap: round;
-            animation: progress 1s ease-out forwards;
-            transform-origin: center;
-            transform: rotate(-90deg);
+            fill: none; stroke-width: 2.5; stroke-linecap: round;
+            animation: progress 1.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+            transform-origin: center; transform: rotate(-90deg);
         }
-        @keyframes progress {
-            0% { stroke-dasharray: 0 100; }
-        }
+        @keyframes progress { 0% { stroke-dasharray: 0 100; } }
         
-        /* Stat Bar Animation */
-        .stat-fill {
-            width: 0;
-            animation: fillBar 1s ease-out forwards;
-        }
-        @keyframes fillBar {
-            to { width: var(--w); }
-        }
+        .stat-fill { width: 0; animation: fillBar 1s ease-out forwards; }
+        @keyframes fillBar { to { width: var(--w); } }
         
-        @keyframes bounce-gentle {
-            0%, 100% { transform: translateY(-5%); }
-            50% { transform: translateY(0); }
+        .stars {
+            background-image: 
+                radial-gradient(1.5px 1.5px at 20px 30px, #fff, rgba(0,0,0,0)),
+                radial-gradient(1.5px 1.5px at 40px 70px, #fff, rgba(0,0,0,0)),
+                radial-gradient(1.5px 1.5px at 50px 160px, #fff, rgba(0,0,0,0));
+            background-repeat: repeat;
+            background-size: 200px 200px;
+            animation: stars 120s linear infinite;
+            opacity: 0.4;
         }
-        .animate-bounce-gentle {
-            animation: bounce-gentle 2s infinite;
+        @keyframes stars { from { background-position: 0 0; } to { background-position: 0 1000px; } }
+
+        .art-gradient {
+            background: radial-gradient(circle at center, var(--color-light) 0%, var(--color-main) 60%, var(--color-dark) 100%);
         }
     </style>
 </head>
-<body class="flex flex-col h-screen text-slate-200 selection:bg-amber-500 selection:text-white">
+<body class="flex flex-col h-screen text-slate-200 selection:bg-amber-500 selection:text-white bg-slate-950">
 
     <!-- Background -->
-    <div class="fixed inset-0 pointer-events-none opacity-40 z-0">
-        <div class="absolute w-full h-full bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] animate-pulse"></div>
+    <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <div class="absolute inset-0 bg-cover bg-center bg-no-repeat bg-animate opacity-40" 
+             style="background-image: url('https://images.unsplash.com/photo-1614730341194-75c6074065db?q=80&w=2074&auto=format&fit=crop');">
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-b from-slate-950/95 via-slate-950/60 to-slate-950/95"></div>
+        <div class="absolute inset-0 stars mix-blend-overlay"></div>
     </div>
 
     <!-- Navbar -->
-    <header class="h-16 border-b border-slate-800 flex items-center justify-between px-4 bg-slate-900/80 backdrop-blur-md z-50 sticky top-0">
-        <div class="flex items-center gap-2">
-            <div class="bg-gradient-to-br from-amber-400 to-orange-600 p-1.5 rounded-lg rotate-45 shadow-lg shadow-amber-500/20">
-                <i data-lucide="swords" class="text-white -rotate-45 w-5 h-5"></i>
+    <header class="h-18 border-b border-white/5 flex items-center justify-between px-6 py-3 glass z-50 sticky top-0 shadow-2xl shadow-black/50">
+        <div class="flex items-center gap-4 cursor-pointer group" onclick="location.reload()">
+            <div class="relative">
+                <div class="absolute inset-0 bg-amber-500 blur-lg opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
+                <div class="bg-gradient-to-br from-slate-800 to-slate-900 border border-amber-500/20 p-2.5 rounded-xl shadow-lg relative z-10 group-hover:border-amber-500/50 transition-colors">
+                    <i data-lucide="swords" class="text-amber-400 w-5 h-5 group-hover:rotate-180 transition-transform duration-700 ease-out"></i>
+                </div>
             </div>
-            <h1 id="app-title" class="hidden md:block text-lg font-bold tracking-wider font-serif text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-amber-500">
-                DIVYA ASTRA
-            </h1>
+            <div class="hidden md:block">
+                <h1 id="app-title" class="text-lg font-bold tracking-[0.25em] font-serif text-transparent bg-clip-text bg-gradient-to-r from-amber-100 via-amber-300 to-amber-100 drop-shadow-sm">
+                    DIVYA ASTRA
+                </h1>
+                <div class="h-0.5 w-1/3 bg-amber-500/50 mt-0.5 rounded-full"></div>
+            </div>
         </div>
         
-        <div class="flex items-center gap-2 md:gap-4">
-            <div id="turn-indicator" class="text-xs text-slate-500 font-mono hidden lg:block"></div>
+        <div class="flex items-center gap-3 md:gap-4">
+            <div id="turn-indicator" class="hidden lg:flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900/50 border border-slate-700/50 text-xs font-mono text-amber-400/90 shadow-inner"></div>
 
-            <button id="rules-btn" class="p-2 rounded-full text-slate-500 hover:text-slate-300 hover:bg-slate-800 transition-all" title="Instructions">
-                <i data-lucide="book-open" class="w-5 h-5"></i>
-            </button>
-
-            <button id="ranking-btn" class="p-2 rounded-full text-slate-500 hover:text-indigo-400 hover:bg-slate-800 transition-all" title="Ranking">
-                <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
-            </button>
-
-            <!-- Volume Controls -->
-            <div class="flex items-center bg-slate-800/50 rounded-full px-2 border border-slate-700/50">
-                <button onclick="changeVolume(-0.1)" class="p-2 text-slate-400 hover:text-white transition-colors" title="Volume Down">
-                    <i data-lucide="volume-1" class="w-4 h-4"></i>
+            <div class="flex items-center gap-2 border-r border-slate-800 pr-4 mr-1">
+                <button id="rules-btn" class="p-2.5 rounded-lg text-slate-400 hover:text-amber-200 hover:bg-slate-800/80 transition-all relative group" title="Instructions">
+                    <i data-lucide="book-open" class="w-5 h-5"></i>
+                    <span class="absolute -bottom-8 left-1/2 -translate-x-1/2 text-[13px] bg-black px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap border border-slate-800">Rules</span>
                 </button>
-                <button id="sound-btn" class="p-2 text-slate-500 hover:text-amber-400 transition-colors mx-1" title="Toggle Sound">
-                    <i data-lucide="volume-x" class="w-5 h-5" id="sound-icon"></i>
-                </button>
-                <button onclick="changeVolume(0.1)" class="p-2 text-slate-400 hover:text-white transition-colors" title="Volume Up">
-                    <i data-lucide="volume-2" class="w-4 h-4"></i>
+
+                <button id="ranking-btn" class="p-2.5 rounded-lg text-slate-400 hover:text-indigo-300 hover:bg-slate-800/80 transition-all relative group" title="Ranking">
+                    <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
+                    <span class="absolute -bottom-8 left-1/2 -translate-x-1/2 text-[13px] bg-black px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap border border-slate-800">Rank</span>
                 </button>
             </div>
 
-            <div class="flex items-center gap-1 bg-slate-800 rounded-full px-2 py-1 border border-slate-700">
-                <i data-lucide="globe" class="w-4 h-4 text-slate-400"></i>
-                <select id="lang-select" class="bg-transparent border-none text-xs text-slate-300 focus:ring-0 cursor-pointer outline-none">
+            <!-- Enhanced Volume Control with Slider -->
+            <div class="hidden sm:flex items-center gap-3 bg-slate-900/60 rounded-full pl-3 pr-4 py-1.5 border border-slate-800 hover:border-slate-700 transition-colors group">
+                <button id="sound-btn" class="text-slate-500 hover:text-amber-400 transition-colors flex-shrink-0" title="Toggle Sound">
+                    <i data-lucide="volume-x" class="w-4 h-4" id="sound-icon"></i>
+                </button>
+                <div class="w-20 flex items-center">
+                    <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="0.4" title="Volume Control">
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2 bg-slate-900/60 rounded-lg px-3 py-2 border border-slate-800 hover:border-slate-700 transition-colors cursor-pointer relative">
+                <i data-lucide="globe" class="w-3.5 h-3.5 text-slate-500"></i>
+                <select id="lang-select" class="bg-transparent border-none text-xs font-medium text-slate-300 focus:ring-0 cursor-pointer outline-none appearance-none pr-4">
                     <option value="en">English</option>
                     <option value="hi">Hindi</option>
                     <option value="mr">Marathi</option>
                     <option value="sa">Sanskrit</option>
                 </select>
+                <div class="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none">
+                    <i data-lucide="chevron-down" class="w-3 h-3 text-slate-500"></i>
+                </div>
             </div>
         </div>
     </header>
 
     <!-- Main Content Area -->
-    <main id="main-container" class="flex-1 relative overflow-y-auto p-4 z-10">
+    <main id="main-container" class="flex-1 relative overflow-y-auto p-3 md:p-8 z-10 scroll-smooth">
         <!-- Views will be injected here via JS -->
     </main>
 
@@ -169,282 +189,226 @@
     <div id="modal-container" class="relative z-50"></div>
 
     <script>
-        // --- CONSTANTS ---
+        // --- CONSTANTS & UTILS ---
         const STAT_COLORS = {
             destruction: "#ef4444", // Red
             precision: "#3b82f6",   // Blue
-            range: "#22c55e",       // Green
+            range: "#10b981",       // Emerald
             speed: "#eab308",       // Yellow
             durability: "#f97316",  // Orange
             mysticism: "#a855f7"    // Purple
         };
 
-        const BATTLE_MUSIC_URL = "https://cdn.pixabay.com/download/audio/2025/10/27/audio_4c5bfd53ba.mp3?filename=epic-cinematic-battle-music-414662.mp3";
+        const BATTLE_MUSIC_URL = "https://cdn.pixabay.com/download/audio/2022/03/24/audio_9732445695.mp3?filename=epic-cinematic-music-113964.mp3";
 
-        // --- DATA ---
-        /* const WEAPONS_DB = [
-            { id: 1, name: "Sudarshana Chakra", name_hi: "सुदर्शन चक्र", deity: "Vishnu", color: "#0ea5e9", desc: "The ultimate spinning disc.", history: "Used by Krishna to behead Shishupala.", specialty: "Inescapable", weaknesses: ["Cannot act against its creator", "Requires total dharma"], stats: { destruction: 99, precision: 100, range: 95, mysticism: 98, speed: 100, durability: 100 } },
-            { id: 2, name: "Brahmastra", name_hi: "ब्रह्मास्त्र", deity: "Brahma", color: "#f59e0b", desc: "A weapon of mass destruction.", history: "Invoked by Ashwatthama vs Pandavas.", specialty: "Nuclear Impact", weaknesses: ["Can be countered by another Brahmastra", "Single use per lifetime (usually)"], stats: { destruction: 98, precision: 85, range: 95, mysticism: 92, speed: 88, durability: 90 } },
-            { id: 3, name: "Trishula", name_hi: "त्रिशूल", deity: "Shiva", color: "#a855f7", desc: "The three-pronged spear.", history: "Severed Ganesha's original head.", specialty: "Nullification", weaknesses: ["Dependent on Shiva's will", "Can be pacified by prayer"], stats: { destruction: 97, precision: 85, range: 70, mysticism: 99, speed: 92, durability: 100 } },
-            { id: 4, name: "Pashupatastra", name_hi: "पाशुपतास्त्र", deity: "Shiva", color: "#6366f1", desc: "Destroys all beings.", history: "Given to Arjuna by Shiva.", specialty: "Cataclysm", weaknesses: ["Forbidden against mortals", "Destroys user if misused"], stats: { destruction: 100, precision: 90, range: 100, mysticism: 97, speed: 95, durability: 95 } },
-            { id: 5, name: "Vajra", name_hi: "वज्र", deity: "Indra", color: "#fbbf24", desc: "The thunderbolt.", history: "Slayed the demon Vritra.", specialty: "Indestructible", weaknesses: ["Foam of the sea (Namuchi)", "Requires Sage's bones"], stats: { destruction: 88, precision: 75, range: 60, mysticism: 85, speed: 96, durability: 99 } },
-            { id: 6, name: "Gandiva", name_hi: "गांडीव", deity: "Arjuna", color: "#dbeafe", desc: "Celestial bow.", history: "Used in Kurukshetra.", specialty: "Inexhaustible", weaknesses: ["Heavy recoil", "Needs immense strength"], stats: { destruction: 85, precision: 98, range: 92, mysticism: 80, speed: 94, durability: 95 } },
-            { id: 7, name: "Kaumodaki", name_hi: "कौमोदकी", deity: "Vishnu", color: "#14b8a6", desc: "Divine mace.", history: "Used to slay Dantavakra.", specialty: "Shockwave", weaknesses: ["Close range only", "Heavy weight"], stats: { destruction: 92, precision: 65, range: 40, mysticism: 88, speed: 60, durability: 98 } },
-            { id: 8, name: "Narayanastra", name_hi: "नारायणास्त्र", deity: "Vishnu", color: "#3b82f6", desc: "Millions of missiles.", history: "Used by Ashwatthama.", specialty: "Infinite Volley", weaknesses: ["Countered by submission", "One use per war"], stats: { destruction: 96, precision: 70, range: 98, mysticism: 94, speed: 85, durability: 85 } },
-            { id: 9, name: "Brahmashirsha", name_hi: "ब्रह्मशीर्ष", deity: "Brahma", color: "#ea580c", desc: "4x Brahmastra.", history: "Threatened the universe.", specialty: "Apocalyptic", weaknesses: ["Retraction is difficult", "Causes drought for 12 years"], stats: { destruction: 99, precision: 82, range: 93, mysticism: 96, speed: 90, durability: 90 } },
-            { id: 10, name: "Vasavi Shakti", name_hi: "वासवी शक्ति", deity: "Karna", color: "#ef4444", desc: "One-shot dart.", history: "Killed Ghatotkacha.", specialty: "Certain Death", weaknesses: ["Single use only", "Returns to Indra after use"], stats: { destruction: 94, precision: 100, range: 85, mysticism: 85, speed: 98, durability: 50 } },
-            // ... (Remaining 100 items procedurally generated below)
+        const WEAPON_ICONS = {
+            bow: "crosshair", sword: "sword", mace: "hammer", disc: "disc-3", spear: "move-diagonal-2",
+            trident: "git-fork", lightning: "zap", fire: "flame", water: "waves", wind: "wind",
+            magic: "sparkles", shield: "shield", default: "axe"
+        };
+
+        function getWeaponType(name, desc) {
+            const n = name.toLowerCase();
+            const d = desc.toLowerCase();
+            if (n.includes("bow") || n.includes("arrow") || n.includes("dhanush")) return "bow";
+            if (n.includes("sword") || n.includes("khadga")) return "sword";
+            if (n.includes("mace") || n.includes("gada")) return "mace";
+            if (n.includes("chakra") || n.includes("disc")) return "disc";
+            if (n.includes("trishula") || n.includes("shoola")) return "trident";
+            if (n.includes("spear") || n.includes("vel") || n.includes("shakti")) return "spear";
+            if (n.includes("vajra") || n.includes("lightning")) return "lightning";
+            if (n.includes("agni") || n.includes("fire")) return "fire";
+            if (n.includes("varuna") || n.includes("water")) return "water";
+            if (n.includes("vayu") || n.includes("wind")) return "wind";
+            if (n.includes("brahma") || n.includes("astra")) return "magic";
+            return "default";
+        }
+
+        // --- DATABASE ---
+        const WEAPONS_DB = [
+            { id: 1, name: "Sudarshana Chakra", name_hi: "सुदर्शन चक्र", deity: "Vishnu", color: "#0ea5e9", desc: "The spinning disc of cosmic order.", history: "Used by Krishna to destroy Shishupala.", specialty: "Inescapable homing", weaknesses: ["Cannot act against its creator"], stats: { destruction: 99, precision: 100, range: 95, mysticism: 98, speed: 100, durability: 100 } },
+            { id: 2, name: "Brahmastra", name_hi: "ब्रह्मास्त्र", deity: "Brahma", color: "#f59e0b", desc: "A weapon of mass destruction.", history: "Used by Ashwatthama and Arjuna.", specialty: "Nuclear-level devastation", weaknesses: ["Can be countered only by another Brahmastra"], stats: { destruction: 98, precision: 85, range: 95, mysticism: 92, speed: 88, durability: 90 } },
+            { id: 3, name: "Trishula", name_hi: "त्रिशूल", deity: "Shiva", color: "#64748b", desc: "Shiva’s trident representing creation, preservation, and destruction.", history: "Used against Tripurasura.", specialty: "Absolute penetration", weaknesses: ["None known"], stats: { destruction: 97, precision: 96, range: 80, mysticism: 99, speed: 85, durability: 100 } },
+            { id: 4, name: "Pashupatastra", name_hi: "पाशुपतास्त्र", deity: "Shiva", color: "#4c1d95", desc: "The most destructive weapon of Shiva.", history: "Granted to Arjuna after penance.", specialty: "Unstoppable divine force", weaknesses: ["Can destroy creation if misused"], stats: { destruction: 100, precision: 92, range: 100, mysticism: 100, speed: 90, durability: 100 } },
+            { id: 5, name: "Vajra", name_hi: "वज्र", deity: "Indra", color: "#facc15", desc: "Indra’s thunderbolt.", history: "Forged from Sage Dadhichi’s bones.", specialty: "Lightning strike", weaknesses: ["Cannot harm Shiva-protected beings"], stats: { destruction: 95, precision: 94, range: 85, mysticism: 88, speed: 97, durability: 95 } },
+            { id: 6, name: "Nandaka Sword", name_hi: "नन्दक", deity: "Vishnu", color: "#0ea5e9", desc: "Sword representing knowledge and truth.", history: "Used to destroy ignorance.", specialty: "Cuts illusions", weaknesses: ["Requires spiritual discipline"], stats: { destruction: 90, precision: 95, range: 60, mysticism: 93, speed: 90, durability: 92 } },
+            { id: 7, name: "Sharanga Bow", name_hi: "शारंग", deity: "Vishnu", color: "#38bdf8", desc: "Krishna’s celestial bow.", history: "Used in Mahabharata.", specialty: "Divine archery", weaknesses: ["Requires Vishnu’s energy"], stats: { destruction: 92, precision: 98, range: 100, mysticism: 90, speed: 89, durability: 95 } },
+            { id: 8, name: "Pinaka", name_hi: "पिनाक", deity: "Shiva", color: "#1e3a8a", desc: "Shiva’s great bow.", history: "Destroyed Tripura.", specialty: "Cosmic arrows", weaknesses: ["Unusable by mortals"], stats: { destruction: 96, precision: 94, range: 100, mysticism: 99, speed: 88, durability: 98 } },
+            { id: 9, name: "Agneyastra", name_hi: "अग्नेयास्त्र", deity: "Agni", color: "#dc2626", desc: "Creates an unquenchable fire.", history: "Used in both epics.", specialty: "Devouring flames", weaknesses: ["Countered by Varunastra"], stats: { destruction: 93, precision: 90, range: 85, mysticism: 80, speed: 92, durability: 85 } },
+            { id: 10, name: "Varunastra", name_hi: "वरुणास्त्र", deity: "Varuna", color: "#2563eb", desc: "Water weapon.", history: "Stops fire weapons.", specialty: "Flood creation", weaknesses: ["Weak against wind-based weapons"], stats: { destruction: 85, precision: 90, range: 88, mysticism: 82, speed: 88, durability: 87 } },
+            { id: 11, name: "Vayavastra", name_hi: "वायवास्त्र", deity: "Vayu", color: "#93c5fd", desc: "Weapon of wind.", history: "Used to create storms.", specialty: "Cyclone strike", weaknesses: ["Blocked by mountains"], stats: { destruction: 89, precision: 87, range: 90, mysticism: 75, speed: 96, durability: 80 } },
+            { id: 12, name: "Vasavi Shakti", name_hi: "वासवी शक्ति", deity: "Indra/Karna", color: "#ef4444", desc: "One-shot dart.", history: "Killed Ghatotkacha.", specialty: "Certain Death", weaknesses: ["Single use only", "Returns to Indra"], stats: { destruction: 94, precision: 100, range: 85, mysticism: 85, speed: 98, durability: 50 } },
+            { id: 13, name: "Bhargavastra", name_hi: "भार्गवास्त्र", deity: "Parashurama", color: "#b91c1c", desc: "Weapon of Parashurama.", history: "Used in Kshatriya extermination.", specialty: "Unmatched destruction", weaknesses: ["Requires Brahmin purity"], stats: { destruction: 94, precision: 90, range: 80, mysticism: 90, speed: 85, durability: 92 } },
+            { id: 14, name: "Narayanastra", name_hi: "नारायणास्त्र", deity: "Vishnu", color: "#0284c7", desc: "Multiplies with resistance.", history: "Used by Ashwatthama.", specialty: "Infinite homing fire", weaknesses: ["Must surrender to survive"], stats: { destruction: 100, precision: 98, range: 100, mysticism: 100, speed: 95, durability: 95 } },
+            { id: 15, name: "Brahmashirsha", name_hi: "ब्रह्मशीर्ष", deity: "Brahma", color: "#ea580c", desc: "4x Brahmastra.", history: "Threatened the universe.", specialty: "Apocalyptic", weaknesses: ["Causes drought for 12 years"], stats: { destruction: 99, precision: 90, range: 100, mysticism: 98, speed: 90, durability: 93 } },
+            { id: 16, name: "Kaumodaki", name_hi: "कौमोदकी", deity: "Vishnu", color: "#14b8a6", desc: "Divine mace.", history: "Used to slay Dantavakra.", specialty: "Shockwave", weaknesses: ["Close range only"], stats: { destruction: 92, precision: 65, range: 40, mysticism: 88, speed: 60, durability: 98 } },
+            { id: 17, name: "Nagastra", name_hi: "नागास्त्र", deity: "Naga", color: "#16a34a", desc: "Summons venomous serpents.", history: "Used in Kurukshetra.", specialty: "Poison strike", weaknesses: ["Countered by Garuda"], stats: { destruction: 83, precision: 87, range: 75, mysticism: 80, speed: 85, durability: 82 } },
+            { id: 18, name: "Anjalika Astra", name_hi: "अंजलिकास्त्र", deity: "Indra", color: "#d97706", desc: "Arrow that guarantees death.", history: "Used by Arjuna to kill Karna.", specialty: "Fatal precision", weaknesses: ["Cannot be reused"], stats: { destruction: 96, precision: 100, range: 90, mysticism: 90, speed: 95, durability: 80 } },
+            { id: 19, name: "Gandiva", name_hi: "गांडीव", deity: "Agni", color: "#dbeafe", desc: "Arjuna’s divine bow.", history: "Gifted by Agni.", specialty: "Unlimited arrows", weaknesses: ["Needs immense strength"], stats: { destruction: 90, precision: 100, range: 100, mysticism: 85, speed: 95, durability: 95 } },
+            { id: 20, name: "Kodanda Bow", name_hi: "कोदण्ड", deity: "Rama", color: "#7c2d12", desc: "Bow of Lord Rama.", history: "Used against Ravana.", specialty: "Perfect aim", weaknesses: ["Only Rama can wield fully"], stats: { destruction: 92, precision: 100, range: 100, mysticism: 90, speed: 94, durability: 95 } }
         ];
         
-        for (let i = 11; i <= 100; i++) {
-            if (!WEAPONS_DB.find(w => w.id === i)) {
-                const hue = (i * 137.508) % 360;
-                const prefixIdx = i % 8;
-                const suffixIdx = i % 5;
-                WEAPONS_DB.push({
-                    id: i,
-                    name: `${["Iron", "Golden", "Silver", "Bronze", "Obsidian", "Emerald", "Ruby", "Sapphire"][prefixIdx]} ${["Arrow", "Mace", "Sword", "Spear", "Discus"][suffixIdx]}`,
-                    name_hi: "अस्त्र",
-                    deity: ["Soldier", "General", "King", "Guard", "Demon"][i % 5],
-                    color: `hsl(${hue}, 70%, 60%)`,
-                    desc: "A standard but deadly weapon of war.",
-                    history: "Used in the great cosmic wars.",
-                    specialty: "Reliable",
-                    weaknesses: ["Mortal craftsmanship", "Breaks under stress"],
-                    stats: { 
-                        destruction: 30 + (i % 60), precision: 40 + (i % 50), range: 20 + (i % 70), 
-                        speed: 30 + (i % 60), durability: 40 + (i % 50), mysticism: 10 + (i % 80) 
-                    }
-                });
-            }
-        } */
-
-        const WEAPONS_DB = [
-                { id: 1, name: "Sudarshana Chakra", name_hi: "सुदर्शन चक्र", deity: "Vishnu", color: "#0ea5e9", desc: "The spinning disc of cosmic order.", history: "Used by Krishna to destroy Shishupala.", specialty: "Inescapable homing", weaknesses: ["Cannot act against its creator"], stats: { destruction: 99, precision: 100, range: 95, mysticism: 98, speed: 100, durability: 100 } },
-                { id: 2, name: "Brahmastra", name_hi: "ब्रह्मास्त्र", deity: "Brahma", color: "#f59e0b", desc: "A weapon of mass destruction.", history: "Used by Ashwatthama and Arjuna.", specialty: "Nuclear-level devastation", weaknesses: ["Can be countered only by another Brahmastra"], stats: { destruction: 98, precision: 85, range: 95, mysticism: 92, speed: 88, durability: 90 } },
-
-                { id: 3, name: "Trishula", name_hi: "त्रिशूल", deity: "Shiva", color: "#64748b", desc: "Shiva’s trident representing creation, preservation, and destruction.", history: "Used against Tripurasura.", specialty: "Absolute penetration", weaknesses: ["None known"], stats: { destruction: 97, precision: 96, range: 80, mysticism: 99, speed: 85, durability: 100 } },
-                { id: 4, name: "Pashupatastra", name_hi: "पाशुपतास्त्र", deity: "Shiva", color: "#1e293b", desc: "The most destructive weapon of Shiva.", history: "Granted to Arjuna after penance.", specialty: "Unstoppable divine force", weaknesses: ["Can destroy creation if misused"], stats: { destruction: 100, precision: 92, range: 100, mysticism: 100, speed: 90, durability: 100 } },
-                { id: 5, name: "Vajra", name_hi: "वज्र", deity: "Indra", color: "#facc15", desc: "Indra’s thunderbolt.", history: "Forged from Sage Dadhichi’s bones.", specialty: "Lightning strike", weaknesses: ["Cannot harm Shiva-protected beings"], stats: { destruction: 95, precision: 94, range: 85, mysticism: 88, speed: 97, durability: 95 } },
-                { id: 6, name: "Nandaka Sword", name_hi: "नन्दक", deity: "Vishnu", color: "#0ea5e9", desc: "Sword representing knowledge and truth.", history: "Used to destroy ignorance.", specialty: "Cuts illusions", weaknesses: ["Requires spiritual discipline"], stats: { destruction: 90, precision: 95, range: 60, mysticism: 93, speed: 90, durability: 92 } },
-                { id: 7, name: "Sharanga Bow", name_hi: "शारंग", deity: "Vishnu", color: "#38bdf8", desc: "Krishna’s celestial bow.", history: "Used in Mahabharata.", specialty: "Divine archery", weaknesses: ["Requires Vishnu’s energy"], stats: { destruction: 92, precision: 98, range: 100, mysticism: 90, speed: 89, durability: 95 } },
-                { id: 8, name: "Pinaka", name_hi: "पिनाक", deity: "Shiva", color: "#1e3a8a", desc: "Shiva’s great bow.", history: "Destroyed Tripura.", specialty: "Cosmic arrows", weaknesses: ["Unusable by mortals"], stats: { destruction: 96, precision: 94, range: 100, mysticism: 99, speed: 88, durability: 98 } },
-                { id: 9, name: "Agneyastra", name_hi: "अग्नेयास्त्र", deity: "Agni", color: "#dc2626", desc: "Creates an unquenchable fire.", history: "Used in both epics.", specialty: "Devouring flames", weaknesses: ["Countered by Varunastra"], stats: { destruction: 93, precision: 90, range: 85, mysticism: 80, speed: 92, durability: 85 } },
-                { id: 10, name: "Varunastra", name_hi: "वरुणास्त्र", deity: "Varuna", color: "#2563eb", desc: "Water weapon.", history: "Stops fire weapons.", specialty: "Flood creation", weaknesses: ["Weak against wind-based weapons"], stats: { destruction: 85, precision: 90, range: 88, mysticism: 82, speed: 88, durability: 87 } },
-
-                // FULL LIST FROM 11 TO 100
-
-                { id: 11, name: "Vayavastra", name_hi: "वायवास्त्र", deity: "Vayu", color: "#93c5fd", desc: "Weapon of wind.", history: "Used to create storms.", specialty: "Cyclone strike", weaknesses: ["Blocked by mountains"], stats: { destruction: 89, precision: 87, range: 90, mysticism: 75, speed: 96, durability: 80 } },
-                { id: 12, name: "Parjanyastra", name_hi: "पर्जन्यास्त्र", deity: "Indra", color: "#60a5fa", desc: "Creates torrential rains.", history: "Used by ancient rishis.", specialty: "Thunder-rain combo", weaknesses: ["Weak in dry climates"], stats: { destruction: 88, precision: 85, range: 90, mysticism: 78, speed: 90, durability: 82 } },
-                { id: 13, name: "Bhargavastra", name_hi: "भार्गवास्त्र", deity: "Parashurama", color: "#ef4444", desc: "Weapon of Parashurama.", history: "Used in Kshatriya extermination.", specialty: "Unmatched destruction", weaknesses: ["Requires Brahmin purity"], stats: { destruction: 94, precision: 90, range: 80, mysticism: 90, speed: 85, durability: 92 } },
-                { id: 14, name: "Narayanastra", name_hi: "नारायणास्त्र", deity: "Vishnu", color: "#0284c7", desc: "Multiplies with resistance.", history: "Used by Ashwatthama.", specialty: "Infinite homing fire", weaknesses: ["Must surrender"], stats: { destruction: 100, precision: 98, range: 100, mysticism: 100, speed: 95, durability: 95 } },
-                { id: 15, name: "Vaishnavastra", name_hi: "वैष्णवास्त्र", deity: "Vishnu", color: "#0c4a6e", desc: "Anti-asura weapon.", history: "Used by many avatars.", specialty: "Destroys demonic beings", weaknesses: ["Cannot harm devotees"], stats: { destruction: 96, precision: 97, range: 98, mysticism: 99, speed: 92, durability: 94 } },
-                { id: 16, name: "Brahmashira Astra", name_hi: "ब्रह्मशिरा अस्त्र", deity: "Brahma", color: "#fbbf24", desc: "Fourfold Brahma weapon.", history: "Clashed between Arjuna and Ashwatthama.", specialty: "Ends lineage", weaknesses: ["Catastrophic impact"], stats: { destruction: 100, precision: 90, range: 100, mysticism: 98, speed: 90, durability: 93 } },
-                { id: 17, name: "Garudastra", name_hi: "गरुड़ास्त्र", deity: "Garuda", color: "#f87171", desc: "Destroys serpents.", history: "Used in Naga battles.", specialty: "Anti-serpent storm", weaknesses: ["Ineffective on humans"], stats: { destruction: 85, precision: 88, range: 80, mysticism: 86, speed: 93, durability: 85 } },
-                { id: 18, name: "Nagastra", name_hi: "नागास्त्र", deity: "Naga", color: "#16a34a", desc: "Summons venomous serpents.", history: "Used in Kurukshetra.", specialty: "Poison strike", weaknesses: ["Countered by Garuda"], stats: { destruction: 83, precision: 87, range: 75, mysticism: 80, speed: 85, durability: 82 } },
-                { id: 19, name: "Shakti", name_hi: "शक्ति", deity: "Durga", color: "#be123c", desc: "Spear of divine feminine energy.", history: "Given to Kartikeya.", specialty: "Piercing force", weaknesses: ["Requires divine wielder"], stats: { destruction: 92, precision: 95, range: 70, mysticism: 92, speed: 88, durability: 90 } },
-
-                // NOW ADDING ALL WEAPONS 20–100 (TRUE, NO SHORTCUTS)
-
-                { id: 20, name: "Anjalika Astra", name_hi: "अंजलिकास्त्र", deity: "Indra", color: "#d97706", desc: "Arrow that guarantees death.", history: "Used by Arjuna to kill Karna.", specialty: "Fatal precision", weaknesses: ["Cannot be reused"], stats: { destruction: 96, precision: 100, range: 90, mysticism: 90, speed: 95, durability: 80 } },
-                { id: 21, name: "Tvashtra Astra", name_hi: "त्वष्टास्त्र", deity: "Tvashta", color: "#f97316", desc: "Weapon of divine craftsmanship.", history: "Created using cosmic metals.", specialty: "Shape-shifting", weaknesses: ["Rarely granted"], stats: { destruction: 88, precision: 85, range: 80, mysticism: 92, speed: 85, durability: 95 } },
-                { id: 22, name: "Sammohana Astra", name_hi: "सम्मोहन अस्त्र", deity: "Various", color: "#4b5563", desc: "Induces unconsciousness.", history: "Used in multiple battles.", specialty: "Mind paralysis", weaknesses: ["Countered by clarity mantras"], stats: { destruction: 40, precision: 95, range: 90, mysticism: 98, speed: 92, durability: 70 } },
-                { id: 23, name: "Mohanastra", name_hi: "मोहनास्त्र", deity: "Varuna", color: "#0ea5e9", desc: "Weapon that creates illusions.", history: "Used against armies.", specialty: "Mass illusion", weaknesses: ["Broken by true-sight"], stats: { destruction: 30, precision: 80, range: 85, mysticism: 95, speed: 88, durability: 70 } },
-                { id: 24, name: "Gandiva Bow", name_hi: "गाण्डीव", deity: "Agni", color: "#b91c1c", desc: "Arjuna’s divine bow.", history: "Gifted by Agni.", specialty: "Unlimited arrows", weaknesses: ["Needs immense strength"], stats: { destruction: 90, precision: 100, range: 100, mysticism: 85, speed: 95, durability: 95 } },
-                { id: 25, name: "Kodanda Bow", name_hi: "कोदण्ड", deity: "Rama", color: "#7c2d12", desc: "Bow of Lord Rama.", history: "Used against Ravana.", specialty: "Perfect aim", weaknesses: ["Only Rama can wield fully"], stats: { destruction: 92, precision: 100, range: 100, mysticism: 90, speed: 94, durability: 95 } },
-
-                // Continue through 26–100 — FULL LIST PROVIDED
-
-                { id: 26, name: "Sarpasana Arrow", name_hi: "सर्पसना बाण", deity: "Nagas", color: "#15803d", desc: "Arrow that transforms into serpents.", specialty: "Poison strike", weaknesses: ["Garuda energy"], stats: { destruction: 80, precision: 85, range: 75, mysticism: 70, speed: 78, durability: 80 } },
-                { id: 27, name: "Shoola Astra", name_hi: "शूल अस्त्र", deity: "Shiva", color: "#1f2937", desc: "Divine spear strike.", specialty: "Piercing destruction", weaknesses: ["Needs Shiva’s blessing"], stats: { destruction: 95, precision: 90, range: 70, mysticism: 93, speed: 85, durability: 92 } },
-                { id: 28, name: "Vishnu Dhanu", name_hi: "विष्णु धनु", deity: "Vishnu", color: "#1e40af", desc: "Bow of cosmic force.", specialty: "Light arrows", weaknesses: ["Used rarely"], stats: { destruction: 90, precision: 98, range: 100, mysticism: 95, speed: 92, durability: 90 } },
-                { id: 29, name: "Rudra Astra", name_hi: "रुद्रास्त्र", deity: "Rudra", color: "#7f1d1d", desc: "Storm of destruction.", specialty: "Massive damage", weaknesses: ["Overwhelms wielder"], stats: { destruction: 97, precision: 90, range: 95, mysticism: 96, speed: 88, durability: 95 } },
-                { id: 30, name: "Rudra Bow", name_hi: "रुद्र धनुष", deity: "Shiva", color: "#4a044e", desc: "Bow of fierce energy.", specialty: "Rage arrows", weaknesses: ["Requires ascetic focus"], stats: { destruction: 90, precision: 93, range: 95, mysticism: 90, speed: 85, durability: 92 } },
-
-                { id: 31, name: "Vishalyakarani", name_hi: "विशल्यकरणी", deity: "Hanuman", color: "#dc2626", desc: "Herb-based healing weapon.", specialty: "Removes arrowheads", weaknesses: ["Not offensive"], stats: { destruction: 10, precision: 100, range: 20, mysticism: 95, speed: 90, durability: 50 } },
-                { id: 32, name: "Sammohan Chakra", name_hi: "सम्मोहन चक्र", deity: "Krishna", color: "#0284c7", desc: "Disc causing mass hypnosis.", specialty: "Mind control", weaknesses: ["Broken by strong will"], stats: { destruction: 20, precision: 90, range: 80, mysticism: 95, speed: 90, durability: 80 } },
-                { id: 33, name: "Prajnastra", name_hi: "प्रज्ञास्त्र", deity: "Brahma", color: "#fde047", desc: "Restores clarity of mind.", specialty: "Undo illusions", weaknesses: ["Not offensive"], stats: { destruction: 5, precision: 80, range: 40, mysticism: 90, speed: 80, durability: 50 } },
-                { id: 34, name: "Tej Pramathan", name_hi: "तेज प्र्मथन", deity: "Surya", color: "#fbbf24", desc: "Weapon of scorching light.", specialty: "Solar beam", weaknesses: ["Blocked by Varuna"], stats: { destruction: 90, precision: 88, range: 95, mysticism: 85, speed: 90, durability: 85 } },
-                { id: 35, name: "Surya Astra", name_hi: "सूर्य अस्त्र", deity: "Surya", color: "#f97316", desc: "Weapon of blinding radiance.", specialty: "Solar flare", weaknesses: ["Weak at night"], stats: { destruction: 92, precision: 90, range: 95, mysticism: 88, speed: 90, durability: 85 } },
-
-                { id: 36, name: "Chandra Astra", name_hi: "चन्द्र अस्त्र", deity: "Chandra", color: "#60a5fa", desc: "Weapon of chilling moonlight.", specialty: "Mind calming", weaknesses: ["Low destruction"], stats: { destruction: 40, precision: 85, range: 80, mysticism: 90, speed: 70, durability: 80 } },
-                { id: 37, name: "Twilight Astra", name_hi: "संध्या अस्त्र", deity: "Sandhya Devi", color: "#4b5563", desc: "Weapon of dusk energy.", specialty: "Shadow veil", weaknesses: ["Weak in bright environments"], stats: { destruction: 50, precision: 80, range: 75, mysticism: 95, speed: 80, durability: 70 } },
-                { id: 38, name: "Vakra Astra", name_hi: "वक्र अस्त्र", deity: "Ganesha", color: "#fb923c", desc: "Weapon that bends mid-flight.", specialty: "Curve strike", weaknesses: ["Predictable by experts"], stats: { destruction: 60, precision: 90, range: 80, mysticism: 85, speed: 85, durability: 80 } },
-                { id: 39, name: "Gada of Bheema", name_hi: "भीम गदा", deity: "Vayu-putra", color: "#6b7280", desc: "Mace of immense strength.", specialty: "Bone crushing", weaknesses: ["Close range only"], stats: { destruction: 95, precision: 75, range: 30, mysticism: 60, speed: 70, durability: 98 } },
-                { id: 40, name: "Gada of Hanuman", name_hi: "हनुमान गदा", deity: "Hanuman", color: "#ea580c", desc: "Mace of limitless power.", specialty: "Mountain-shattering", weaknesses: ["Only for divine beings"], stats: { destruction: 100, precision: 80, range: 40, mysticism: 95, speed: 80, durability: 100 } },
-
-                { id: 41, name: "Kaumodaki Gada", name_hi: "कौमुदकी गदा", deity: "Vishnu", color: "#2563eb", desc: "Vishnu’s mace.", specialty: "Crushing force", weaknesses: ["Requires Vishnu’s strength"], stats: { destruction: 95, precision: 90, range: 40, mysticism: 90, speed: 80, durability: 100 } },
-                { id: 42, name: "Shani Astra", name_hi: "शनि अस्त्र", deity: "Shani", color: "#1e293b", desc: "Weapon of karmic punishment.", specialty: "Weakens enemies", weaknesses: ["Slow acting"], stats: { destruction: 50, precision: 80, range: 60, mysticism: 98, speed: 60, durability: 90 } },
-                { id: 43, name: "Yama Danda", name_hi: "यम दण्ड", deity: "Yama", color: "#450a0a", desc: "Rod of death.", specialty: "Instant fatality", weaknesses: ["Only works on mortals"], stats: { destruction: 100, precision: 85, range: 50, mysticism: 95, speed: 80, durability: 90 } },
-                { id: 44, name: "Kaal Astra", name_hi: "काल अस्त्र", deity: "Kalabhairava", color: "#0f172a", desc: "Weapon of time.", specialty: "Aging strike", weaknesses: ["Ineffective on immortals"], stats: { destruction: 85, precision: 80, range: 60, mysticism: 100, speed: 70, durability: 90 } },
-                { id: 45, name: "Maya Astra", name_hi: "माया अस्त्र", deity: "Maya", color: "#7e22ce", desc: "Weapon of illusions.", specialty: "Creates fake armies", weaknesses: ["Countered by truth-mantra"], stats: { destruction: 20, precision: 75, range: 90, mysticism: 95, speed: 85, durability: 75 } },
-
-                { id: 46, name: "Dandastra", name_hi: "दण्डास्त्र", deity: "Brahma", color: "#facc15", desc: "Punishment weapon.", specialty: "Stuns armies", weaknesses: ["Temporary effect"], stats: { destruction: 40, precision: 80, range: 80, mysticism: 85, speed: 85, durability: 70 } },
-                { id: 47, name: "Kuber Astra", name_hi: "कुबेर अस्त्र", deity: "Kubera", color: "#65a30d", desc: "Weapon of wealth energy.", specialty: "Drains resources", weaknesses: ["Not lethal"], stats: { destruction: 30, precision: 85, range: 60, mysticism: 90, speed: 80, durability: 70 } },
-                { id: 48, name: "Naag Pasha", name_hi: "नाग पाश", deity: "Naga", color: "#4d7c0f", desc: "Serpent noose.", specialty: "Binding attack", weaknesses: ["Garuda’s presence"], stats: { destruction: 35, precision: 90, range: 60, mysticism: 80, speed: 75, durability: 70 } },
-                { id: 49, name: "Vish Pasha", name_hi: "विष पाश", deity: "Naga", color: "#166534", desc: "Poison noose.", specialty: "Toxic bind", weaknesses: ["Divine antidotes"], stats: { destruction: 50, precision: 85, range: 60, mysticism: 80, speed: 78, durability: 75 } },
-                { id: 50, name: "Jvarastra", name_hi: "ज्वरास्त्र", deity: "Rudra", color: "#b91c1c", desc: "Induces fever.", specialty: "Weakens enemy forces", weaknesses: ["Slow effect"], stats: { destruction: 20, precision: 80, range: 50, mysticism: 85, speed: 70, durability: 70 } },
-
-                // 51–100 CONTINUE
-
-                { id: 51, name: "Ravana Shoola", name_hi: "रावण शूल", deity: "Shiva-blessed", color: "#991b1b", desc: "Ravana’s spear.", specialty: "Rage strike", weaknesses: ["Countered by Rama"], stats: { destruction: 95, precision: 90, range: 70, mysticism: 90, speed: 85, durability: 95 } },
-                { id: 52, name: "Indrastra", name_hi: "इन्द्रास्त्र", deity: "Indra", color: "#fbbf24", desc: "Arrow of lightning.", specialty: "Thunderbolt energy", weaknesses: ["Countered by Vajra"], stats: { destruction: 94, precision: 90, range: 95, mysticism: 88, speed: 92, durability: 90 } },
-                { id: 53, name: "Shankh Astra", name_hi: "शंख अस्त्र", deity: "Vishnu", color: "#cbd5e1", desc: "Conch-based weapon.", specialty: "Sound waves", weaknesses: ["Blocked by silence spells"], stats: { destruction: 50, precision: 80, range: 70, mysticism: 90, speed: 80, durability: 85 } },
-                { id: 54, name: "Ramastra", name_hi: "रामास्त्र", deity: "Rama", color: "#7c2d12", desc: "Weapon of Lord Rama.", specialty: "Unerring aim", weaknesses: ["Used rarely"], stats: { destruction: 98, precision: 100, range: 100, mysticism: 95, speed: 90, durability: 95 } },
-                { id: 55, name: "Lakshmana Astra", name_hi: "लक्ष्मण अस्त्र", deity: "Lakshmana", color: "#fb923c", desc: "Weapon of Lakshmana.", specialty: "Focused strike", weaknesses: ["Lower area damage"], stats: { destruction: 80, precision: 95, range: 90, mysticism: 85, speed: 88, durability: 85 } },
-
-                { id: 56, name: "Sita Astra", name_hi: "सीता अस्त्र", deity: "Sita", color: "#f9a8d4", desc: "Weapon of purity.", specialty: "Purifies surroundings", weaknesses: ["Non-lethal"], stats: { destruction: 10, precision: 80, range: 50, mysticism: 99, speed: 70, durability: 60 } },
-                { id: 57, name: "Shesha Astra", name_hi: "शेष अस्त्र", deity: "Sheshnag", color: "#0f766e", desc: "Weapon of cosmic serpent.", specialty: "Reality distortion", weaknesses: ["Rarely invoked"], stats: { destruction: 95, precision: 90, range: 100, mysticism: 99, speed: 85, durability: 100 } },
-                { id: 58, name: "Kaliya Venom", name_hi: "कालिया विष", deity: "Naga", color: "#334155", desc: "Toxic energy.", specialty: "Corrosion", weaknesses: ["Krishna’s touch"], stats: { destruction: 75, precision: 70, range: 50, mysticism: 80, speed: 70, durability: 85 } },
-                { id: 59, name: "Halahala Fire", name_hi: "हलाहल अग्नि", deity: "Shiva", color: "#450a0a", desc: "Weaponized poison flame.", specialty: "Multidimensional burn", weaknesses: ["Handled only by Shiva"], stats: { destruction: 100, precision: 80, range: 70, mysticism: 100, speed: 80, durability: 95 } },
-                { id: 60, name: "Yogic Astra", name_hi: "योगिक अस्त्र", deity: "Rishis", color: "#6d28d9", desc: "Energy from deep meditation.", specialty: "Soul attack", weaknesses: ["Blocked by divine shields"], stats: { destruction: 85, precision: 90, range: 80, mysticism: 99, speed: 75, durability: 80 } },
-
-                { id: 61, name: "Prana Astra", name_hi: "प्राण अस्त्र", deity: "Prana Dev", color: "#22c55e", desc: "Weapon that drains life force.", specialty: "Life absorption", weaknesses: ["Countered by healing mantras"], stats: { destruction: 85, precision: 90, range: 80, mysticism: 98, speed: 75, durability: 80 } },
-                { id: 62, name: "Mantra Astra", name_hi: "मंत्र अस्त्र", deity: "Rishis", color: "#4f46e5", desc: "Weapon activated by mantras.", specialty: "Spellbound attack", weaknesses: ["Requires pure recitation"], stats: { destruction: 70, precision: 85, range: 75, mysticism: 95, speed: 85, durability: 85 } },
-                { id: 63, name: "Garuda Shakti", name_hi: "गरुड़ शक्ति", deity: "Garuda", color: "#f87171", desc: "Weapon of eagle force.", specialty: "Anti-serpent storm", weaknesses: ["Short duration"], stats: { destruction: 80, precision: 90, range: 80, mysticism: 85, speed: 90, durability: 85 } },
-                { id: 64, name: "Kali Astra", name_hi: "काली अस्त्र", deity: "Kali", color: "#1e1b4b", desc: "Weapon of primal chaos.", specialty: "Fear manifestation", weaknesses: ["Unstable"], stats: { destruction: 98, precision: 80, range: 85, mysticism: 100, speed: 90, durability: 90 } },
-                { id: 65, name: "Durga Astra", name_hi: "दुर्गा अस्त्र", deity: "Durga", color: "#be123c", desc: "Weapon of feminine cosmic power.", specialty: "Multi-weapon assault", weaknesses: ["Needs divine invocation"], stats: { destruction: 97, precision: 95, range: 95, mysticism: 99, speed: 92, durability: 98 } },
-
-                { id: 66, name: "Bhairava Astra", name_hi: "भैरव अस्त्र", deity: "Bhairava", color: "#3f3f46", desc: "Weapon of terror.", specialty: "Soul rupture", weaknesses: ["Unpredictable"], stats: { destruction: 96, precision: 85, range: 80, mysticism: 98, speed: 85, durability: 90 } },
-                { id: 67, name: "Lanka Vijaya Astra", name_hi: "लंका विजय अस्त्र", deity: "Rama", color: "#7c2d12", desc: "Victory-granting weapon.", specialty: "Assured triumph", weaknesses: ["Non-offensive"], stats: { destruction: 5, precision: 95, range: 50, mysticism: 98, speed: 70, durability: 60 } },
-                { id: 68, name: "Pitambari Astra", name_hi: "पीताम्बरी अस्त्र", deity: "Krishna", color: "#fde047", desc: "Weapon of golden light.", specialty: "Enemy disorientation", weaknesses: ["Short duration"], stats: { destruction: 40, precision: 85, range: 60, mysticism: 90, speed: 80, durability: 70 } },
-                { id: 69, name: "Kamadhenu Astra", name_hi: "कामधेनु अस्त्र", deity: "Kamadhenu", color: "#fcd34d", desc: "Weapon of abundance.", specialty: "Summons celestial warriors", weaknesses: ["Slow"], stats: { destruction: 60, precision: 80, range: 85, mysticism: 95, speed: 70, durability: 85 } },
-                { id: 70, name: "Nandi Astra", name_hi: "नंदी अस्त्र", deity: "Nandi", color: "#4c0519", desc: "Weapon of bull-force.", specialty: "Ground quakes", weaknesses: ["Short range"], stats: { destruction: 85, precision: 70, range: 50, mysticism: 90, speed: 70, durability: 95 } },
-
-                { id: 71, name: "Astra of Narasimha", name_hi: "नरसिंह अस्त्र", deity: "Narasimha", color: "#ca8a04", desc: "Weapon of ferocity.", specialty: "Tear apart defenses", weaknesses: ["Unstable energy"], stats: { destruction: 98, precision: 85, range: 70, mysticism: 95, speed: 90, durability: 98 } },
-                { id: 72, name: "Varaha Astra", name_hi: "वराह अस्त्र", deity: "Varaha", color: "#7f1d1d", desc: "Weapon of earth uplift.", specialty: "Terrain alteration", weaknesses: ["Slow activation"], stats: { destruction: 90, precision: 80, range: 60, mysticism: 95, speed: 70, durability: 95 } },
-                { id: 73, name: "Vamana Astra", name_hi: "वामन अस्त्र", deity: "Vamana", color: "#a3e635", desc: "Weapon of cosmic expansion.", specialty: "Space distortion", weaknesses: ["Energy heavy"], stats: { destruction: 85, precision: 80, range: 100, mysticism: 98, speed: 75, durability: 85 } },
-                { id: 74, name: "Parashu of Parashurama", name_hi: "परशु", deity: "Parashurama", color: "#ef4444", desc: "Divine axe.", specialty: "Cleave mountains", weaknesses: ["Heavy"], stats: { destruction: 95, precision: 85, range: 40, mysticism: 90, speed: 75, durability: 100 } },
-                { id: 75, name: "Sudarshan Shakti", name_hi: "सुदर्शन शक्ति", deity: "Vishnu", color: "#0ea5e9", desc: "Mini-chakra weapon.", specialty: "Homing strike", weaknesses: ["Lower power than Sudarshan Chakra"], stats: { destruction: 70, precision: 95, range: 90, mysticism: 85, speed: 95, durability: 85 } },
-
-                { id: 76, name: "Shikhari Astra", name_hi: "शिखरी अस्त्र", deity: "Skanda", color: "#dc2626", desc: "Hunter’s divine arrow.", specialty: "Beast-slaying", weaknesses: ["Short range"], stats: { destruction: 75, precision: 90, range: 70, mysticism: 80, speed: 85, durability: 80 } },
-                { id: 77, name: "Maheshwara Astra", name_hi: "महेश्वर अस्त्र", deity: "Shiva", color: "#111827", desc: "Weapon of Shiva.", specialty: "Cosmic flame", weaknesses: ["Requires high tapasya"], stats: { destruction: 100, precision: 95, range: 100, mysticism: 100, speed: 90, durability: 100 } },
-                { id: 78, name: "Karna Vijaya Astra", name_hi: "कर्ण विजय अस्त्र", deity: "Surya", color: "#facc15", desc: "Victory weapon of Karna.", specialty: "Focus beam", weaknesses: ["Single-use"], stats: { destruction: 95, precision: 90, range: 90, mysticism: 85, speed: 88, durability: 80 } },
-                { id: 79, name: "Bhima Astra", name_hi: "भीम अस्त्र", deity: "Vayu", color: "#475569", desc: "Weapon of strength.", specialty: "Shockwaves", weaknesses: ["Short range"], stats: { destruction: 90, precision: 75, range: 60, mysticism: 70, speed: 80, durability: 95 } },
-                { id: 80, name: "Arjuna Astra", name_hi: "अर्जुन अस्त्र", deity: "Indra", color: "#38bdf8", desc: "Precision weapon.", specialty: "Perfect accuracy", weaknesses: ["Lower area damage"], stats: { destruction: 80, precision: 100, range: 95, mysticism: 85, speed: 95, durability: 90 } },
-
-                { id: 81, name: "Kritant Astra", name_hi: "कृतांत अस्त्र", deity: "Yama", color: "#2d1b1b", desc: "Death-bringing force.", specialty: "End-of-life", weaknesses: ["Doesn't affect immortals"], stats: { destruction: 90, precision: 80, range: 70, mysticism: 95, speed: 75, durability: 90 } },
-                { id: 82, name: "Kalpavriksha Astra", name_hi: "कल्पवृक्ष अस्त्र", deity: "Divine Tree", color: "#4ade80", desc: "Wish-granting force.", specialty: "Creates anything", weaknesses: ["Not designed for war"], stats: { destruction: 20, precision: 100, range: 60, mysticism: 99, speed: 80, durability: 80 } },
-                { id: 83, name: "Soma Astra", name_hi: "सोम अस्त्र", deity: "Soma", color: "#bfdbfe", desc: "Weapon of bliss.", specialty: "Induces calm", weaknesses: ["Non-offensive"], stats: { destruction: 5, precision: 80, range: 60, mysticism: 90, speed: 70, durability: 70 } },
-                { id: 84, name: "Agniparvata Astra", name_hi: "अग्निपर्वत अस्त्र", deity: "Agni", color: "#b91c1c", desc: "Creates volcano-like eruptions.", specialty: "Lava strike", weaknesses: ["Slow activation"], stats: { destruction: 95, precision: 85, range: 95, mysticism: 90, speed: 70, durability: 90 } },
-                { id: 85, name: "Vishvarupa Astra", name_hi: "विश्वरूप अस्त्र", deity: "Vishnu", color: "#3b82f6", desc: "Weapon of cosmic form.", specialty: "Multi-dimensional attack", weaknesses: ["Unstable"], stats: { destruction: 98, precision: 90, range: 100, mysticism: 100, speed: 90, durability: 95 } },
-
-                { id: 86, name: "Trikona Astra", name_hi: "त्रिकोण अस्त्र", deity: "Tripura", color: "#4c0519", desc: "Weapon representing the three worlds.", specialty: "Tri-energy beam", weaknesses: ["Requires alignment"], stats: { destruction: 85, precision: 80, range: 90, mysticism: 95, speed: 80, durability: 90 } },
-                { id: 87, name: "Sarpa Shakti", name_hi: "सर्प शक्ति", deity: "Naga", color: "#166534", desc: "Weapon of cobra force.", specialty: "Venom blast", weaknesses: ["Garuda aura"], stats: { destruction: 70, precision: 80, range: 60, mysticism: 75, speed: 78, durability: 75 } },
-                { id: 88, name: "Nandi Ghanta", name_hi: "नंदी घण्टा", deity: "Nandi", color: "#4b5563", desc: "Bell of divine sound.", specialty: "Sound shockwave", weaknesses: ["Ineffective in void"], stats: { destruction: 60, precision: 85, range: 70, mysticism: 90, speed: 85, durability: 95 } },
-                { id: 89, name: "Rishi Danda", name_hi: "ऋषि दण्ड", deity: "Rishis", color: "#6b7280", desc: "Staff holding ancient wisdom.", specialty: "Spiritual strike", weaknesses: ["Requires purity"], stats: { destruction: 50, precision: 85, range: 60, mysticism: 98, speed: 75, durability: 80 } },
-                { id: 90, name: "Kala Chakra", name_hi: "काल चक्र", deity: "Time", color: "#171717", desc: "Wheel of time.", specialty: "Stops or speeds time", weaknesses: ["Drain on wielder"], stats: { destruction: 95, precision: 90, range: 95, mysticism: 100, speed: 90, durability: 95 } },
-
-                { id: 91, name: "Agniratha Astra", name_hi: "अग्निरथ अस्त्र", deity: "Agni", color: "#dc2626", desc: "Fire chariot weapon.", specialty: "Burning charge", weaknesses: ["Needs open area"], stats: { destruction: 90, precision: 85, range: 80, mysticism: 80, speed: 85, durability: 90 } },
-                { id: 92, name: "Soma Teer", name_hi: "सोम तीर", deity: "Soma", color: "#f0f9ff", desc: "Arrow of peace.", specialty: "Disarms opponents", weaknesses: ["Non-lethal"], stats: { destruction: 5, precision: 90, range: 70, mysticism: 95, speed: 75, durability: 70 } },
-                { id: 93, name: "Rakshasa Astra", name_hi: "राक्षस अस्त्र", deity: "Rakshasa", color: "#450a0a", desc: "Weapon of dark energy.", specialty: "Fear and chaos", weaknesses: ["Countered by divine light"], stats: { destruction: 85, precision: 80, range: 80, mysticism: 85, speed: 80, durability: 80 } },
-                { id: 94, name: "Yaksha Astra", name_hi: "यक्ष अस्त्र", deity: "Yaksha", color: "#3f6212", desc: "Weapon of guardians.", specialty: "Nature control", weaknesses: ["Slow"], stats: { destruction: 70, precision: 80, range: 75, mysticism: 90, speed: 70, durability: 85 } },
-                { id: 95, name: "Bhuta Astra", name_hi: "भूत अस्त्र", deity: "Bhutas", color: "#6b7280", desc: "Ghostly energy.", specialty: "Spirit strike", weaknesses: ["Exorcised by mantras"], stats: { destruction: 60, precision: 80, range: 70, mysticism: 95, speed: 75, durability: 75 } },
-
-                { id: 96, name: "Pretastra", name_hi: "प्रेत अस्त्र", deity: "Pretas", color: "#4b5563", desc: "Summons wandering spirits.", specialty: "Fear wave", weaknesses: ["Broken by divine aura"], stats: { destruction: 55, precision: 80, range: 70, mysticism: 90, speed: 75, durability: 70 } },
-                { id: 97, name: "Shikhar Astra", name_hi: "शिखर अस्त्र", deity: "Mountain Gods", color: "#334155", desc: "Weapon of mountains.", specialty: "Rock fall", weaknesses: ["Slow"], stats: { destruction: 85, precision: 75, range: 70, mysticism: 85, speed: 60, durability: 95 } },
-                { id: 98, name: "Samudra Astra", name_hi: "समुद्र अस्त्र", deity: "Sea God", color: "#0284c7", desc: "Oceanic weapon.", specialty: "Tidal waves", weaknesses: ["Weak inland"], stats: { destruction: 90, precision: 80, range: 95, mysticism: 85, speed: 70, durability: 90 } },
-                { id: 99, name: "Pawan Shakti", name_hi: "पवन शक्ति", deity: "Vayu", color: "#7dd3fc", desc: "Wind blast.", specialty: "Air slicing", weaknesses: ["Scattered by obstacles"], stats: { destruction: 70, precision: 85, range: 80, mysticism: 75, speed: 95, durability: 75 } },
-                { id: 100, name: "Moksha Astra", name_hi: "मोक्ष अस्त्र", deity: "Vishnu", color: "#16a34a", desc: "Weapon granting liberation.", specialty: "Ends karmic cycle", weaknesses: ["Not offensive"], stats: { destruction: 0, precision: 100, range: 60, mysticism: 100, speed: 70, durability: 80 } }
-          ];
-
         const TRANSLATIONS = {
             en: {
-                title: "DIVYA ASTRA", subtitle: "Massive Multiplayer Battle", enter: "Start Game", next: "Next Round",
-                next_turn: "Next Turn", load_weapons: "Load New Weapons", lore: "Lore", guru: "Guru", reincarnate: "New Game",
-                add_player: "Add Player", start_war: "Begin War", start_battle: "Start First Round", begin_round: "Begin Next Round", select: "Select Attribute",
-                reveal: "REVEAL POWER", clash: "CLASH!", winner: "WINNER", tie: "TIE", stats_hidden: "Stats Hidden",
-                preview_mode: "Weapon Preview", sudden_death: "SUDDEN DEATH", turn: "'s Turn", points: "pts",
-                legend_title: "Legendary Usage", final_result: "Final Result", grand_winner: "Grand Winner",
-                instructions: "Game Instructions", close: "Close", current_standings: "Current Standings",
-                view_arsenal: "View Arsenal", arsenal_title: "Arsenal History", weak_points: "Weak Points",
+                title: "DIVYA ASTRA", subtitle: "Celestial Card Battle", enter: "Start Game", next: "Next Round",
+                next_turn: "Next Turn", load_weapons: "Reforge Weapons", lore: "Lore", guru: "Guru", reincarnate: "Reincarnate",
+                add_player: "Summon Warrior", start_war: "Begin War", start_battle: "Enter Battlefield", begin_round: "Next Round", select: "Invoke Attribute",
+                reveal: "REVEAL POWER", clash: "CLASH!", winner: "WINNER", tie: "TIE", stats_hidden: "Unknown Power",
+                preview_mode: "Arsenal Preview", sudden_death: "SUDDEN DEATH", turn: "'s Turn", points: "pts",
+                legend_title: "Legendary Usage", final_result: "Epoch Result", grand_winner: "Samrat (Emperor)",
+                instructions: "Sacred Texts", close: "Close", current_standings: "Current Standings",
+                view_arsenal: "View Arsenal", arsenal_title: "Arsenal History", weak_points: "Limitations",
                 rule_list: [
-                    "🌌 Objective: Prove your worth as the supreme warrior by accumulating the most points over 3 epic rounds.",
-                    "⚔️ Setup: Gather 2-30 players. Each is granted a divine Astra (weapon) chosen by fate.",
-                    "👀 Preview Phase: Before the chaos, study the battlefield. You can see every warrior's weapon name and deity. Use this knowledge!",
-                    "🔥 The Turn: One player becomes the Active Warrior. They must choose a 'Power Attribute' (like Destruction or Speed).",
-                    "🧠 Blind Strategy: The Active Warrior cannot see their stats! They must rely on the weapon's LORE and HISTORY to guess its strongest attribute.",
-                    "🏆 Scoring: Once an attribute is chosen, all weapons reveal their power. The highest value wins! The winner takes 12 points. If there's a tie, points are split.",
-                    "🔄 Arsenal Rotation: Your weapon is your bond. You keep it until EVERY player has had a turn. Only then do the gods grant new weapons.",
-                    "☠️ Sudden Death: If the war ends in a tie, the top warriors face off in a final, single-round elimination battle."
+                    "🌌 Objective: Accumulate the most Karma Points over 3 epic rounds.",
+                    "⚔️ Setup: 2-30 Warriors. Each receives 5 Divine Astras.",
+                    "👀 Preview: Study your opponent's weapon deities before the clash.",
+                    "🔥 The Turn: The Active Warrior invokes a Power (e.g., Destruction). They cannot see the exact value!",
+                    "🧠 Strategy: Use the Lore and History to guess the strongest attribute.",
+                    "🏆 Scoring: Highest value wins the round (12 Karma Points shared among winners).",
+                    "🔄 Rotation: Keep your weapon until everyone has attacked. Then, new weapons are granted.",
+                    "☠️ Sudden Death: Ties are broken in a final single-round duel."
                 ],
                 stats: { destruction: "Destruction", precision: "Precision", range: "Range", speed: "Speed", durability: "Durability", mysticism: "Mysticism" },
-                stat_descriptions: { destruction: "Raw damage potential.", precision: "Accuracy.", range: "Max distance.", speed: "Velocity.", durability: "Resilience.", mysticism: "Magic power." },
-                footer: "Divine Knowledge: The 'Vajra' was forged from the bones of Sage Dadhichi."
+                stat_descriptions: { destruction: "Raw damage potential.", precision: "Accuracy of the strike.", range: "Effective distance.", speed: "Velocity of attack.", durability: "Weapon resilience.", mysticism: "Spiritual energy." }
             },
-            hi: { title: "दिव्य अस्त्र", subtitle: "महायुद्ध", enter: "प्रारंभ", next: "अगला दौर", next_turn: "अगली बारी", load_weapons: "नए शस्त्र लोड करें", start_war: "युद्ध आरंभ", start_battle: "युद्ध शुरू", begin_round: "अगला दौर शुरू", select: "गुण चुनें", reveal: "शक्ति देखें", clash: "प्रहार!", winner: "विजेता", tie: "टाई", stats_hidden: "गुप्त", preview_mode: "शस्त्र दर्शन", turn: " की बारी", points: "अंक", legend_title: "पौराणिक कथा", final_result: "परिणाम", grand_winner: "महाविजेता", instructions: "नियम", close: "बंद करें", current_standings: "रैंकिंग", view_arsenal: "शस्त्रागार देखें", arsenal_title: "शस्त्र इतिहास", weak_points: "कमजोरियां", stats: { destruction: "विनाश", precision: "सटीकता", range: "व्याप्ति", speed: "गति", durability: "दृढ़ता", mysticism: "माया" }, stat_descriptions: { destruction: "विनाश क्षमता", precision: "सटीकता", range: "दूरी", speed: "वेग", durability: "टिकाऊपन", mysticism: "जादू" }, footer: "ज्ञान: वज्र दधीचि की हड्डियों से बना था।" },
-            mr: { title: "दिव्य अस्त्र", subtitle: "महायुद्ध", enter: "सुरू करा", next: "पुढील फेरी", next_turn: "पुढची पाळी", load_weapons: "नवीन शस्त्रे लोड करा", start_war: "युद्ध सुरू", start_battle: "लढाई सुरू", begin_round: "पुढील फेरी सुरू", select: "गुण निवडा", reveal: "शक्ती पहा", clash: "प्रहार!", winner: "विजेता", tie: "बरोबरी", stats_hidden: "गुप्त", preview_mode: "शस्त्र प्रदर्शन", turn: " ची पाळी", points: "गुण", legend_title: "कथा", final_result: "निकाल", grand_winner: "महाविजेता", instructions: "नियम", close: "बंद करा", current_standings: "गुणफलक", view_arsenal: "शस्त्रे पहा", arsenal_title: "शस्त्र इतिहास", weak_points: "कमकुवतपणा", stats: { destruction: "विनाश", precision: "अचूकता", range: "पल्ला", speed: "वेग", durability: "टिकाऊपणा", mysticism: "गूढविद्या" }, stat_descriptions: { destruction: "विनाश", precision: "नेमबाजी", range: "पल्ला", speed: "वेग", durability: "टिकाऊपणा", mysticism: "जादू" }, footer: "ज्ञान: वज्र दधीचींच्या हाडांपासून बनवले होते." },
-            sa: { title: "दिव्यास्त्रम्", subtitle: "संग्रामः", enter: "आरभताम्", next: "अग्रिमः", next_turn: "अग्रिमः वारः", load_weapons: "नूतनशस्त्राणि", start_war: "युद्धारम्भः", start_battle: "आरम्भः", begin_round: "अग्रिमचक्रारम्भः", select: "चिनोतु", reveal: "दर्शनम्", clash: "प्रहारः!", winner: "विजयी", tie: "साम्यम्", stats_hidden: "गुप्ताः", preview_mode: "शस्त्रदर्शनम्", turn: " वारः", points: "अंकाः", legend_title: "कथा", final_result: "परिणामः", grand_winner: "महाविजयी", instructions: "नियमाः", close: "पिधत्त", current_standings: "स्थितिः", view_arsenal: "शस्त्रागारम्", arsenal_title: "शस्त्रेतिहासः", weak_points: "दुर्बलता", stats: { destruction: "विनाशः", precision: "लक्ष्यभेदः", range: "व्याप्तिः", speed: "वेगः", durability: "स्थैर्यम्", mysticism: "माया" }, stat_descriptions: { destruction: "शक्तिः", precision: "अचूकता", range: "सीमा", speed: "गतिः", durability: "स्थैर्यम्", mysticism: "माया" }, footer: "ज्ञानम्: वज्रम् दधीचेः अस्थिभिः निर्मितम्।" }
+            hi: { title: "दिव्य अस्त्र", subtitle: "महायुद्ध", enter: "प्रारंभ", next: "अगला दौर", next_turn: "अगली बारी", load_weapons: "नए शस्त्र", start_war: "युद्ध आरंभ", start_battle: "युद्ध शुरू", begin_round: "अगला दौर", select: "गुण चुनें", reveal: "शक्ति देखें", clash: "प्रहार!", winner: "विजेता", tie: "टाई", stats_hidden: "गुप्त शक्ति", preview_mode: "शस्त्र दर्शन", turn: " की बारी", points: "अंक", legend_title: "पौराणिक कथा", final_result: "परिणाम", grand_winner: "चक्रवर्ती सम्राट", instructions: "नियम", close: "बंद करें", current_standings: "रैंकिंग", view_arsenal: "शस्त्रागार", arsenal_title: "शस्त्र इतिहास", weak_points: "कमजोरियां", stats: { destruction: "विनाश", precision: "सटीकता", range: "व्याप्ति", speed: "गति", durability: "दृढ़ता", mysticism: "माया" }, stat_descriptions: { destruction: "विनाश क्षमता", precision: "सटीकता", range: "दूरी", speed: "वेग", durability: "टिकाऊपन", mysticism: "जादू" } },
+            mr: { title: "दिव्य अस्त्र", subtitle: "महायुद्ध", enter: "सुरू करा", next: "पुढील फेरी", next_turn: "पुढची पाळी", load_weapons: "नवीन शस्त्रे", start_war: "युद्ध सुरू", start_battle: "लढाई सुरू", begin_round: "पुढील फेरी", select: "गुण निवडा", reveal: "शक्ती पहा", clash: "प्रहार!", winner: "विजेता", tie: "बरोबरी", stats_hidden: "गुप्त शक्ती", preview_mode: "शस्त्र दर्शन", turn: " ची पाळी", points: "गुण", legend_title: "कथा", final_result: "निकाल", grand_winner: "महाविजेता", instructions: "नियम", close: "बंद करा", current_standings: "गुणफलक", view_arsenal: "शस्त्रे पहा", arsenal_title: "शस्त्र इतिहास", weak_points: "कमकुवतपणा", stats: { destruction: "विनाश", precision: "अचूकता", range: "पल्ला", speed: "वेग", durability: "टिकाऊपणा", mysticism: "गूढविद्या" }, stat_descriptions: { destruction: "विनाश", precision: "नेमबाजी", range: "पल्ला", speed: "वेग", durability: "टिकाऊपणा", mysticism: "जादू" } },
+            sa: { title: "दिव्यास्त्रम्", subtitle: "संग्रामः", enter: "आरभताम्", next: "अग्रिमः", next_turn: "अग्रिमः वारः", load_weapons: "नूतनशस्त्राणि", start_war: "युद्धारम्भः", start_battle: "आरम्भः", begin_round: "अग्रिमचक्रारम्भः", select: "चिनोतु", reveal: "दर्शनम्", clash: "प्रहारः!", winner: "विजयी", tie: "साम्यम्", stats_hidden: "गुप्ताः", preview_mode: "शस्त्रदर्शनम्", turn: " वारः", points: "अंकाः", legend_title: "कथा", final_result: "परिणामः", grand_winner: "महाविजयी", instructions: "नियमाः", close: "पिधत्त", current_standings: "स्थितिः", view_arsenal: "शस्त्रागारम्", arsenal_title: "शस्त्रेतिहासः", weak_points: "दुर्बलता", stats: { destruction: "विनाशः", precision: "लक्ष्यभेदः", range: "व्याप्तिः", speed: "वेगः", durability: "स्थैर्यम्", mysticism: "माया" }, stat_descriptions: { destruction: "शक्तिः", precision: "अचूकता", range: "सीमा", speed: "गतिः", durability: "स्थैर्यम्", mysticism: "माया" } }
         };
 
         TRANSLATIONS.hi = { ...TRANSLATIONS.en, ...TRANSLATIONS.hi };
         TRANSLATIONS.mr = { ...TRANSLATIONS.en, ...TRANSLATIONS.mr };
         TRANSLATIONS.sa = { ...TRANSLATIONS.en, ...TRANSLATIONS.sa };
 
+        // --- STATE ---
         const state = {
             screen: 'setup', lang: 'en',
-            players: [ { id: 1, name: 'Arjuna', score: 0, deck: [], currentCard: null, usedWeapons: [] }, { id: 2, name: 'Karna', score: 0, deck: [], currentCard: null, usedWeapons: [] } ],
+            players: [ 
+                { id: 1, name: 'Arjuna', score: 0, deck: [], currentCard: null, usedWeapons: [] }, 
+                { id: 2, name: 'Karna', score: 0, deck: [], currentCard: null, usedWeapons: [] } 
+            ],
             turnIndex: 0, totalTurnsPlayed: 0, phase: 'preview', selectedStat: null, winningStatVal: 0, roundWinners: [], roundLog: "", maxRounds: 3, gameMode: 'normal',
             audio: new Audio(BATTLE_MUSIC_URL),
-            volume: 0.5,
+            volume: 0.4,
             isAudioPlaying: false,
             viewingPlayerId: null
         };
 
-        // Initialize Audio settings
         state.audio.loop = true;
         state.audio.volume = state.volume;
 
+        // --- AUDIO ---
         function toggleSound() {
-            if (state.isAudioPlaying) stopSound();
-            else startSound();
+            const slider = document.getElementById('volume-slider');
+            if (state.isAudioPlaying) {
+                state.audio.pause();
+                state.isAudioPlaying = false;
+                // Store current volume to restore later if needed, but slider visual stays
+            } else {
+                // If volume is 0, bump it up slightly so play works meaningfully
+                if (state.volume <= 0.05) {
+                    updateVolume(0.3);
+                    slider.value = 0.3;
+                }
+                const playPromise = state.audio.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(_ => {
+                        state.isAudioPlaying = true;
+                    }).catch(error => {
+                        console.log("Audio play blocked by browser policy until interaction.");
+                        // alert("Please interact with the game to enable audio.");
+                    });
+                }
+            }
             updateSoundIcon();
         }
 
-        function startSound() {
-            state.audio.play().then(() => {
-                state.isAudioPlaying = true;
-                updateSoundIcon();
-            }).catch(e => console.error("Audio play failed:", e));
-        }
-
-        function stopSound() {
-            state.audio.pause();
-            state.isAudioPlaying = false;
-            updateSoundIcon();
-        }
-
-        function changeVolume(delta) {
-            let newVol = state.volume + delta;
-            if (newVol > 1) newVol = 1;
-            if (newVol < 0) newVol = 0;
-            state.volume = newVol;
-            state.audio.volume = newVol;
+        function updateVolume(val) {
+            state.volume = parseFloat(val);
+            state.audio.volume = state.volume;
             
-            // Optional: Flash the volume icon to indicate change
-            const btn = document.getElementById('sound-btn');
-            btn.classList.add('text-amber-400');
-            setTimeout(() => btn.classList.remove('text-amber-400'), 200);
+            // If dragging slider, ensure audio is playing (unless volume is 0)
+            if(state.volume > 0 && !state.isAudioPlaying && val > 0.05) {
+               // Optionally auto-play when sliding volume up, or just update state
+               // toggleSound(); // This might be annoying if auto-triggered
+            }
+            
+            updateSoundIcon();
         }
 
         function updateSoundIcon() {
             const icon = document.getElementById('sound-icon');
-            if(state.isAudioPlaying) {
-                icon.setAttribute('data-lucide', 'volume-2');
-                icon.classList.add('text-amber-400');
-            } else {
+            if (!icon) return;
+            
+            if (state.volume === 0 || !state.isAudioPlaying) {
                 icon.setAttribute('data-lucide', 'volume-x');
                 icon.classList.remove('text-amber-400');
+                icon.classList.add('text-slate-500');
+            } else if (state.volume < 0.5) {
+                icon.setAttribute('data-lucide', 'volume-1');
+                icon.classList.add('text-amber-400');
+                icon.classList.remove('text-slate-500');
+            } else {
+                icon.setAttribute('data-lucide', 'volume-2');
+                icon.classList.add('text-amber-400');
+                icon.classList.remove('text-slate-500');
             }
             lucide.createIcons();
         }
 
         // --- LOGIC ---
         function getT() { return TRANSLATIONS[state.lang]; }
-        function addPlayer() { const input = document.getElementById('new-player-input'); const name = input.value.trim(); if (name && state.players.length < 30) { state.players.push({ id: Date.now(), name, score: 0, deck: [], currentCard: null, usedWeapons: [] }); input.value = ''; render(); } }
-        function removePlayer(id) { if (state.players.length > 2) { state.players = state.players.filter(p => p.id !== id); render(); } }
-        function updatePlayerName(id, newName) { const p = state.players.find(pl => pl.id === id); if (p) p.name = newName; }
-        function startWar() { const shuffled = [...WEAPONS_DB].sort(() => Math.random() - 0.5); let wIdx = 0; state.players.forEach((p, idx) => { p.score = 0; p.deck = []; p.usedWeapons = []; for(let i=0; i<5; i++) { p.deck.push(shuffled[wIdx % shuffled.length]); wIdx++; } p.currentCard = p.deck[0]; p.usedWeapons.push(p.currentCard); }); state.totalTurnsPlayed = 0; state.phase = 'preview'; state.screen = 'battle'; state.gameMode = 'normal'; state.maxRounds = 3; render(); }
+        
+        function addPlayer() { 
+            const input = document.getElementById('new-player-input'); 
+            const name = input.value.trim(); 
+            if (name && state.players.length < 30) { 
+                state.players.push({ id: Date.now(), name, score: 0, deck: [], currentCard: null, usedWeapons: [] }); 
+                input.value = ''; 
+                render(); 
+            } 
+        }
+        
+        function removePlayer(id) { 
+            if (state.players.length > 2) { 
+                state.players = state.players.filter(p => p.id !== id); 
+                render(); 
+            } 
+        }
+        
+        function updatePlayerName(id, newName) { 
+            const p = state.players.find(pl => pl.id === id); 
+            if (p) p.name = newName; 
+        }
+        
+        function startWar() { 
+            const deckSizeNeeded = state.players.length * 5;
+            let pool = [...WEAPONS_DB];
+            while(pool.length < deckSizeNeeded) {
+                pool = [...pool, ...WEAPONS_DB]; 
+            }
+            const shuffled = pool.sort(() => Math.random() - 0.5);
+            
+            let wIdx = 0; 
+            state.players.forEach((p) => { 
+                p.score = 0; 
+                p.deck = []; 
+                p.usedWeapons = []; 
+                for(let i=0; i<5; i++) { 
+                    p.deck.push(shuffled[wIdx % shuffled.length]); 
+                    wIdx++; 
+                } 
+                p.currentCard = p.deck[0]; 
+                p.usedWeapons.push(p.currentCard); 
+            }); 
+            
+            state.totalTurnsPlayed = 0; 
+            state.phase = 'preview'; 
+            state.screen = 'battle'; 
+            state.gameMode = 'normal'; 
+            state.maxRounds = 3; 
+            render(); 
+        }
         
         function enterCombat() {
             if (state.totalTurnsPlayed === 0) {
@@ -454,8 +418,40 @@
             render();
         }
 
-        function selectStat(key) { state.selectedStat = key; state.phase = 'reveal_self'; render(); }
-        function revealResult() { state.phase = 'result'; let maxVal = -1; let winners = []; state.players.forEach(p => { if(p.currentCard) { const val = p.currentCard.stats[state.selectedStat]; if(val > maxVal) { maxVal = val; winners = [p.id]; } else if (val === maxVal) { winners.push(p.id); } } }); state.roundWinners = winners; state.winningStatVal = maxVal; const points = Math.floor(12 / winners.length); state.players.forEach(p => { if(winners.includes(p.id)) p.score += points; }); const winnerNames = state.players.filter(p => winners.includes(p.id)).map(p => p.name).join(" & "); const t = getT(); state.roundLog = `${winnerNames} ${t.winner} (${t.stats[state.selectedStat]}: ${maxVal})!`; render(); }
+        function selectStat(key) { 
+            state.selectedStat = key; 
+            state.phase = 'reveal_self'; 
+            render(); 
+        }
+        
+        function revealResult() { 
+            state.phase = 'result'; 
+            let maxVal = -1; 
+            let winners = []; 
+            state.players.forEach(p => { 
+                if(p.currentCard) { 
+                    const val = p.currentCard.stats[state.selectedStat]; 
+                    if(val > maxVal) { 
+                        maxVal = val; 
+                        winners = [p.id]; 
+                    } else if (val === maxVal) { 
+                        winners.push(p.id); 
+                    } 
+                } 
+            }); 
+            state.roundWinners = winners; 
+            state.winningStatVal = maxVal; 
+            
+            const points = Math.floor(12 / winners.length); 
+            state.players.forEach(p => { 
+                if(winners.includes(p.id)) p.score += points; 
+            }); 
+            
+            const winnerNames = state.players.filter(p => winners.includes(p.id)).map(p => p.name).join(" & "); 
+            const t = getT(); 
+            state.roundLog = `${winnerNames} ${t.winner} (${t.stats[state.selectedStat]}: ${maxVal})`; 
+            render(); 
+        }
         
         function nextRound() { 
             const nextTurn = state.totalTurnsPlayed + 1; 
@@ -492,21 +488,70 @@
             render(); 
         }
         
-        function initiateTieBreaker(winners) { state.gameMode = 'tiebreaker'; state.maxRounds = 1; state.totalTurnsPlayed = 0; state.turnIndex = 0; state.phase = 'preview'; state.roundWinners = []; const shuffled = [...WEAPONS_DB].sort(() => Math.random() - 0.5); let wIdx = 0; const tiePlayers = winners.map(p => { const deck = [shuffled[wIdx++]]; return { ...p, score: 0, deck: deck, currentCard: deck[0], usedWeapons: [deck[0]] }; }); state.players = tiePlayers; render(); }
+        function initiateTieBreaker(winners) { 
+            state.gameMode = 'tiebreaker'; 
+            state.maxRounds = 1; 
+            state.totalTurnsPlayed = 0; 
+            state.turnIndex = 0; 
+            state.phase = 'preview'; 
+            state.roundWinners = []; 
+            
+            const shuffled = [...WEAPONS_DB].sort(() => Math.random() - 0.5); 
+            let wIdx = 0; 
+            const tiePlayers = winners.map(p => { 
+                const deck = [shuffled[wIdx++]]; 
+                return { ...p, score: 0, deck: deck, currentCard: deck[0], usedWeapons: [deck[0]] }; 
+            }); 
+            state.players = tiePlayers; 
+            render(); 
+        }
+        
         function setViewingPlayer(id) { state.viewingPlayerId = id; render(); }
 
-        // --- RENDERING HELPERS ---
-        function getWeaponImageUrl(name) { return `https://placehold.co/600x400/0f172a/f59e0b?text=${encodeURIComponent(name)}&font=playfair-display`; }
-        function getIconForStat(key) { switch(key) { case 'destruction': return 'flame'; case 'precision': return 'target'; case 'range': return 'wind'; case 'speed': return 'activity'; case 'durability': return 'hexagon'; case 'mysticism': return 'zap'; default: return 'star'; } }
+        // --- RENDERER ---
+        function getIconForStat(key) { 
+            switch(key) { 
+                case 'destruction': return 'flame'; 
+                case 'precision': return 'crosshair'; 
+                case 'range': return 'radar'; 
+                case 'speed': return 'zap'; 
+                case 'durability': return 'shield'; 
+                case 'mysticism': return 'sparkles'; 
+                default: return 'star'; 
+            } 
+        }
+
+        function renderCardArt(weapon, isSmall = false) {
+            const imageUrl = `https://raw.githubusercontent.com/ngornalli/DivyaAstra/refs/heads/main/image/${weapon.id}.jpg`;
+            
+            // Use object-contain to show full image. 
+            // Use w-full h-full to fill the 1:1 container.
+            return `
+                <div class="w-full h-full relative overflow-hidden bg-slate-900 flex items-center justify-center">
+                    <!-- Background blur for fill -->
+                    <img src="${imageUrl}" class="absolute inset-0 w-full h-full object-cover opacity-50 blur-sm scale-110">
+                    
+                    <!-- Main Image -->
+                    <img src="${imageUrl}" 
+                         class="relative w-full h-full object-contain z-10 transition-transform duration-700 group-hover:scale-105"
+                         alt="${weapon.name}"
+                         loading="lazy"
+                         onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\\'w-full h-full flex items-center justify-center bg-slate-900 text-slate-600\\'><i data-lucide=\\'image-off\\' class=\\'w-8 h-8\\'></i></div>'; lucide.createIcons();"
+                    >
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-60 z-20"></div>
+                </div>
+            `;
+        }
 
         function render() {
             const t = getT();
             document.getElementById('app-title').innerText = t.title;
             const turnEl = document.getElementById('turn-indicator');
+            
             if(state.screen === 'battle') {
-                turnEl.innerText = state.gameMode === 'tiebreaker' ? t.sudden_death : `Turn: ${state.totalTurnsPlayed + 1} / ${state.players.length * state.maxRounds}`;
-                 if(state.gameMode === 'tiebreaker') turnEl.className = "text-xs font-mono hidden sm:block text-red-500 font-bold animate-pulse";
-                 else turnEl.className = "text-xs text-slate-500 font-mono hidden sm:block";
+                turnEl.innerHTML = state.gameMode === 'tiebreaker' 
+                    ? `<span class="animate-pulse text-red-400 font-bold flex items-center gap-1"><i data-lucide="skull" class="w-3 h-3"></i> ${t.sudden_death}</span>` 
+                    : `<i data-lucide="hourglass" class="w-3 h-3 text-amber-500"></i> <span>${t.next_turn}: ${state.totalTurnsPlayed + 1} / ${state.players.length * state.maxRounds}</span>`;
             } else turnEl.innerText = "";
 
             const container = document.getElementById('main-container');
@@ -522,87 +567,173 @@
                  const activePlayer = state.players[state.turnIndex];
                 modalContainer.innerHTML = renderActiveModal(activePlayer, t);
             } else modalContainer.innerHTML = '';
+            
             lucide.createIcons();
         }
 
         function renderSetup(container, t) {
             container.innerHTML = `
                 <div class="max-w-md mx-auto mt-10 animate-in zoom-in">
-                    <div class="text-center mb-8"><i data-lucide="swords" class="w-16 h-16 mx-auto text-amber-500 mb-4"></i><h2 class="text-4xl font-serif font-bold text-white mb-2">${t.subtitle}</h2><p class="text-slate-400 text-sm">2-30 Warriors</p></div>
-                    <div class="glass rounded-2xl p-6 shadow-2xl">
-                        <div class="flex gap-2 mb-6"><input id="new-player-input" type="text" placeholder="Warrior Name..." class="flex-1 bg-slate-950/50 border border-slate-600 rounded-lg px-4 py-3 text-sm focus:border-amber-500 outline-none text-white"><button onclick="addPlayer()" class="bg-indigo-600 hover:bg-indigo-500 text-white p-3 rounded-lg"><i data-lucide="user-plus"></i></button></div>
-                        <div class="space-y-2 mb-8 max-h-60 overflow-y-auto custom-scrollbar pr-2">${state.players.map(p => `<div class="flex items-center justify-between bg-slate-800/50 p-3 rounded-lg border border-slate-700/50"><input oninput="updatePlayerName(${p.id}, this.value)" value="${p.name}" class="bg-transparent border-none outline-none text-sm font-bold text-slate-200 w-full"/><button onclick="removePlayer(${p.id})" class="text-slate-500 hover:text-red-400"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div>`).join('')}</div>
-                        <button onclick="startWar()" class="w-full bg-gradient-to-r from-amber-500 to-orange-600 text-white font-bold py-4 rounded-xl uppercase tracking-widest flex items-center justify-center gap-2 hover:scale-105 transition-transform"><i data-lucide="play" class="w-4 h-4"></i> ${t.start_war}</button>
+                    <div class="text-center mb-8">
+                        <div class="relative inline-block mb-4">
+                            <div class="absolute inset-0 bg-amber-500 blur-xl opacity-20 rounded-full"></div>
+                            <i data-lucide="swords" class="w-20 h-20 relative z-10 text-amber-500"></i>
+                        </div>
+                        <h2 class="text-4xl font-serif font-bold text-white mb-2 tracking-wider drop-shadow-lg">${t.subtitle}</h2>
+                        <p class="text-slate-400 text-sm uppercase tracking-widest">2-30 Warriors</p>
+                    </div>
+                    <div class="glass rounded-2xl p-6 shadow-2xl border-t border-white/10 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-amber-500/50 to-transparent"></div>
+                        
+                        <div class="flex gap-2 mb-6 relative z-10">
+                            <input id="new-player-input" type="text" placeholder="Warrior Name..." class="flex-1 bg-slate-950/60 border border-slate-700 rounded-xl px-4 py-3 text-sm focus:border-amber-500/50 focus:ring-1 focus:ring-amber-500/20 outline-none text-white placeholder-slate-500 transition-all shadow-inner">
+                            <button onclick="addPlayer()" class="bg-gradient-to-br from-indigo-600 to-indigo-800 hover:from-indigo-500 hover:to-indigo-700 text-white p-3 rounded-xl transition-all shadow-lg shadow-indigo-500/20 border border-white/10 group">
+                                <i data-lucide="user-plus" class="group-hover:scale-110 transition-transform"></i>
+                            </button>
+                        </div>
+                        <div class="space-y-2 mb-8 max-h-60 overflow-y-auto custom-scrollbar pr-2 relative z-10">
+                            ${state.players.map(p => `
+                                <div class="flex items-center justify-between bg-slate-800/30 p-3 rounded-xl border border-slate-700/50 hover:bg-slate-800/60 hover:border-slate-600 transition-all group slide-up">
+                                    <input oninput="updatePlayerName(${p.id}, this.value)" value="${p.name}" class="bg-transparent border-none outline-none text-sm font-bold text-slate-200 w-full"/>
+                                    <button onclick="removePlayer(${p.id})" class="text-slate-600 hover:text-red-400 transition-colors opacity-0 group-hover:opacity-100 p-1 hover:bg-red-500/10 rounded-lg">
+                                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                    </button>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <button onclick="startWar()" class="w-full bg-gradient-to-r from-amber-600 to-orange-700 text-white font-bold py-4 rounded-xl uppercase tracking-[0.15em] text-sm flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-orange-600/20 border border-white/10 relative overflow-hidden group">
+                            <span class="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></span>
+                            <i data-lucide="swords" class="w-4 h-4"></i> ${t.start_war}
+                        </button>
                     </div>
                 </div>`;
         }
 
         function renderBattle(container, t) {
-            let gridClass = "grid-cols-2 md:grid-cols-3 lg:grid-cols-4"; const count = state.players.length;
-            if (count <= 2) gridClass = "grid-cols-2 max-w-3xl mx-auto"; else if (count <= 6) gridClass = "grid-cols-2 md:grid-cols-3"; else if (count <= 12) gridClass = "grid-cols-3 md:grid-cols-4"; else gridClass = "grid-cols-4 md:grid-cols-5 lg:grid-cols-6";
+            let gridClass = "grid-cols-2 md:grid-cols-3 lg:grid-cols-4"; 
+            const count = state.players.length;
+            if (count <= 2) gridClass = "grid-cols-2 max-w-3xl mx-auto"; 
+            else if (count <= 6) gridClass = "grid-cols-1 md:grid-cols-3"; 
+            else if (count <= 12) gridClass = "grid-cols-1 md:grid-cols-4"; 
+            else gridClass = "grid-cols-2 md:grid-cols-5 lg:grid-cols-6";
             
             const isRoundOver = (state.totalTurnsPlayed + 1) % state.players.length === 0;
             const btnText = (state.totalTurnsPlayed + 1) >= state.players.length * state.maxRounds ? t.final_result : (isRoundOver ? t.load_weapons : t.next_turn);
 
             const donutColor = state.selectedStat ? STAT_COLORS[state.selectedStat] : '#eab308';
             const winnerDonut = state.phase === 'result' ? `
-                <div class="flex items-center gap-3 bg-slate-800/80 rounded-lg px-3 py-1 border border-slate-700 shrink-0">
+                <div class="flex items-center gap-3 bg-slate-900/80 rounded-xl px-4 py-1.5 border border-slate-700 shrink-0 shadow-inner">
                     <div class="relative w-8 h-8">
                         <svg viewBox="0 0 36 36" class="circular-chart w-full h-full">
                             <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
                             <path class="circle" stroke-dasharray="${state.winningStatVal}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" style="stroke: ${donutColor};" />
                         </svg>
-                         <div class="absolute inset-0 flex items-center justify-center text-[9px] font-bold text-white">${state.winningStatVal}</div>
+                         <div class="absolute inset-0 flex items-center justify-center text-[12px] font-bold text-white">${state.winningStatVal}</div>
                     </div>
-                    <div class="text-[10px] uppercase font-bold text-slate-300 hidden md:block">
+                    <div class="text-[13px] uppercase font-bold text-slate-300 hidden md:block">
                         ${state.selectedStat ? t.stats[state.selectedStat] : ''}
                     </div>
                 </div>
             ` : '';
 
             container.innerHTML = `
-                <div class="flex flex-col items-center h-full w-full">
+                <div class="flex flex-col items-center h-full w-full relative">
                     ${state.phase === 'preview' ? `
-                        <div class="w-full max-w-lg bg-slate-900/80 border border-indigo-500/30 rounded-xl p-6 mb-8 text-center shadow-2xl animate-bounce-gentle z-30">
+                        <div class="w-full max-w-lg glass rounded-2xl p-6 mb-8 text-center shadow-2xl animate-bounce z-30 absolute top-10 border-t border-white/10">
                             <h3 class="text-amber-400 font-bold uppercase tracking-widest text-sm mb-2 flex items-center justify-center gap-2">
                                 <i data-lucide="eye"></i> ${t.preview_mode}
                             </h3>
-                            <button onclick="enterCombat()" class="w-full py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm uppercase tracking-widest rounded-lg shadow-lg mt-4">
+                            <p class="text-xs text-slate-400 mb-4 leading-relaxed">Memorize the Deities and Weapons before the clash begins.</p>
+                            <button onclick="enterCombat()" class="w-full py-3 bg-gradient-to-r from-indigo-600 to-indigo-800 hover:from-indigo-500 hover:to-indigo-700 text-white font-bold text-sm uppercase tracking-widest rounded-xl shadow-lg hover:scale-[1.02] transition-transform border border-white/10">
                                 ${state.totalTurnsPlayed === 0 ? t.start_battle : t.begin_round}
                             </button>
                         </div>
                     ` : ''}
                     ${state.phase === 'result' ? `
-                    <div class="w-full max-w-3xl bg-slate-900/95 border border-amber-500/30 rounded-xl p-3 mb-8 shadow-2xl z-30 sticky top-2 glass flex flex-col md:flex-row items-center justify-between gap-4">
-                         <div class="flex items-center justify-between w-full gap-4">
-                            <div class="text-amber-300 font-bold text-sm md:text-lg drop-shadow-md truncate flex-1">${state.roundLog}</div>
+                    <div class="w-full max-w-3xl glass rounded-xl p-3 mb-8 shadow-2xl z-30 sticky top-2 flex flex-col md:flex-row items-center justify-between gap-4 slide-up border-t border-amber-500/20">
+                         <div class="flex items-center justify-between w-full gap-4 px-2">
+                            <div class="text-amber-100 font-bold text-sm md:text-lg drop-shadow-sm truncate flex-1">${state.roundLog}</div>
                             ${winnerDonut}
                          </div>
-                         <button onclick="nextRound()" class="w-full md:w-auto px-6 py-2 bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs uppercase tracking-widest rounded-lg shadow-lg shrink-0 whitespace-nowrap transition-transform hover:scale-105">${btnText}</button>
+                         <button onclick="nextRound()" class="w-full md:w-auto px-6 py-2 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white font-bold text-xs uppercase tracking-widest rounded-lg shadow-lg shrink-0 whitespace-nowrap transition-transform hover:scale-105 ring-2 ring-amber-500/30 ring-offset-2 ring-offset-slate-900 border border-white/10">${btnText}</button>
                     </div>` : ''}
-                    <div class="grid ${gridClass} gap-4 w-full pb-20">${state.players.map((p, idx) => renderPlayerCard(p, idx === state.turnIndex, t)).join('')}</div>
+                    <div class="grid ${gridClass} gap-4 md:gap-6 w-full pb-20 px-2">${state.players.map((p, idx) => renderPlayerCard(p, idx === state.turnIndex, t)).join('')}</div>
                 </div>`;
         }
 
         function renderPlayerCard(player, isActive, t) {
-            const weapon = player.currentCard; const isWinner = state.roundWinners.includes(player.id); const showStats = state.phase === 'result';
-            let borderColor = '#334155'; if (isActive || isWinner || state.phase === 'preview') borderColor = weapon.color;
+            const weapon = player.currentCard; 
+            const isWinner = state.roundWinners.includes(player.id); 
+            const showStats = state.phase === 'result';
+            
+            let borderColor = 'rgba(30, 41, 59, 0.5)'; 
+            if (isActive || isWinner || state.phase === 'preview') borderColor = weapon.color;
+            
             return `
-                <div class="relative flex flex-col bg-slate-900 rounded-xl border transition-all duration-500 overflow-hidden group ${isActive ? 'scale-105 z-20 shadow-2xl' : 'opacity-90 hover:opacity-100'}" style="border-color: ${borderColor}; box-shadow: ${isActive || isWinner ? `0 0 15px ${weapon.color}40` : 'none'}">
-                    ${isWinner ? `<div class="absolute inset-0 border-2 rounded-xl animate-pulse pointer-events-none z-50" style="border-color: ${weapon.color}"></div>` : ''}
-                    <div class="flex justify-between items-center bg-slate-950 p-2 border-b border-slate-800"><div class="font-bold text-xs text-slate-200 truncate max-w-[80px]">${player.name}</div><div class="flex items-center gap-1 text-[10px] font-mono px-1.5 py-0.5 rounded border border-slate-800" style="color: ${weapon.color}; background-color: ${weapon.color}10"><i data-lucide="trophy" class="w-3 h-3"></i> ${player.score}</div></div>
-                    <div class="h-32 bg-black relative overflow-hidden">
-                        <img src="${getWeaponImageUrl(weapon.name)}" class="w-full h-full object-cover opacity-80">
-                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent"></div>
-                        <div class="absolute bottom-0 w-full p-2 text-center flex flex-col items-center justify-end min-h-[2rem]">
-                             <div class="text-xs font-serif font-bold drop-shadow-md mb-1 whitespace-normal leading-tight" style="color: ${weapon.color}">${weapon.name}</div>
-                             <div class="text-[10px] font-hindi text-slate-400 whitespace-normal leading-none">${weapon.name_hi}</div>
+                <div class="relative flex flex-col bg-slate-900/90 backdrop-blur-md rounded-2xl border transition-all duration-500 overflow-hidden group ${isActive ? 'scale-[1.02] z-20 shadow-2xl ring-1 ring-white/20' : 'opacity-90 hover:opacity-100 hover:-translate-y-1 hover:shadow-xl'}" style="border-color: ${borderColor}; box-shadow: ${isActive || isWinner ? `0 0 30px ${weapon.color}20` : 'none'}">
+                    ${isWinner ? `<div class="absolute inset-0 border-[3px] rounded-2xl animate-pulse pointer-events-none z-50" style="border-color: ${weapon.color}"></div>` : ''}
+                    
+                    <!-- Header -->
+                    <div class="flex justify-between items-center bg-slate-950/80 p-3 border-b border-white/5">
+                        <div class="font-bold text-xs text-slate-200 truncate max-w-[100px] uppercase tracking-wide">${player.name}</div>
+                        <div class="flex items-center gap-1.5 text-[13px] font-mono px-2 py-0.5 rounded-full bg-slate-900 border border-slate-700" style="color: ${weapon.color}">
+                            <i data-lucide="trophy" class="w-3 h-3"></i> ${player.score}
                         </div>
                     </div>
-                    <div class="flex-1 p-2 bg-slate-900 flex flex-col items-center justify-center min-h-[60px]">
-                        ${state.phase === 'preview' ? `<div class="text-center fade-in"><div class="text-[9px] uppercase tracking-widest mb-1" style="color: ${weapon.color}">${weapon.deity}</div><p class="text-[8px] text-slate-500 italic line-clamp-2 leading-tight">"${weapon.desc}"</p></div>` : ''}
-                        ${(state.phase === 'select' || state.phase === 'reveal_self') ? `<div class="text-slate-700 text-[10px] uppercase tracking-widest flex flex-col items-center gap-1 animate-pulse">${isActive ? `<span style="color: ${weapon.color}" class="font-bold">Choosing...</span>` : `<i data-lucide="eye-off" class="w-4 h-4"></i> ${t.stats_hidden}`}</div>` : ''}
-                        ${(state.phase === 'result' && showStats && state.selectedStat) ? `<div class="flex flex-col items-center w-full zoom-in"><div class="text-[9px] uppercase mb-1" style="color: ${STAT_COLORS[state.selectedStat]}">${t.stats[state.selectedStat]}</div><div class="w-full h-2 bg-slate-800 rounded-full mb-1 overflow-hidden relative"><div class="h-full rounded-full relative" style="width: ${weapon.stats[state.selectedStat]}%; background: ${STAT_COLORS[state.selectedStat]}; box-shadow: 0 0 10px ${STAT_COLORS[state.selectedStat]}"></div></div><div class="text-lg font-black text-white">${weapon.stats[state.selectedStat]}</div></div>` : ''}
+
+                    <!-- Image (Square Ratio) -->
+                    <div class="aspect-square bg-black relative overflow-hidden group-hover:brightness-110 transition-all">
+                        ${renderCardArt(weapon)}
+                        <div class="absolute bottom-0 w-full p-3 text-center flex flex-col items-center justify-end bg-gradient-to-t from-slate-950 via-slate-950/90 to-transparent min-h-[5rem] z-20">
+                             <div class="text-sm font-serif font-bold drop-shadow-md mb-0.5 whitespace-normal leading-tight text-white tracking-wide">${weapon.name}</div>
+                             <div class="text-[13px] font-hindi text-slate-400 whitespace-normal leading-none opacity-80">${weapon.name_hi}</div>
+                        </div>
+                    </div>
+
+                    <!-- Extended Details Body -->
+                    <div class="flex-1 p-4 bg-slate-900/95 flex flex-col gap-3 border-t border-white/5 min-h-[200px]">
+                        
+                        <!-- Deity & Specialty -->
+                        <div class="flex justify-between items-start gap-2 pb-2 border-b border-white/5">
+                            <div class="flex flex-col gap-0.5">
+                                <span class="text-[9px] text-slate-500 uppercase tracking-wider font-bold">Deity</span>
+                                <span class="text-[13px] text-indigo-300 font-bold flex items-center gap-1"><i data-lucide="sparkles" class="w-3 h-3"></i> ${weapon.deity}</span>
+                            </div>
+                            <div class="flex flex-col gap-0.5 items-end text-right">
+                                <span class="text-[9px] text-slate-500 uppercase tracking-wider font-bold">Specialty</span>
+                                <span class="text-[13px] text-amber-200 font-medium max-w-[100px] truncate">${weapon.specialty}</span>
+                            </div>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="bg-slate-950/50 p-2.5 rounded-lg border border-white/5 shadow-inner">
+                            <p class="text-[13px] text-slate-400 italic leading-relaxed line-clamp-3">"${weapon.desc}"</p>
+                        </div>
+
+                        <!-- Weakness -->
+                        <div class="flex items-center gap-2 text-[13px] text-red-300/90 bg-red-950/20 px-2.5 py-1.5 rounded border border-red-500/10">
+                            <i data-lucide="shield-alert" class="w-3 h-3 flex-shrink-0 text-red-400"></i>
+                            <span class="truncate w-full">Weakness: ${weapon.weaknesses[0]}</span>
+                        </div>
+
+                        <!-- Action / Result Status (Pinned to Bottom) -->
+                        <div class="mt-auto pt-2">
+                            ${(state.phase === 'select' || state.phase === 'reveal_self') ? `
+                                <div class="text-slate-600 text-[13px] uppercase tracking-widest flex flex-col items-center gap-2 bg-slate-950 rounded-lg p-2 border border-slate-800 shadow-sm">
+                                    ${isActive ? `<span style="color: ${weapon.color}" class="font-bold flex items-center gap-2 animate-pulse"><i data-lucide="loader-2" class="w-3 h-3 animate-spin"></i> Selecting...</span>` : `<span class="flex items-center gap-1.5 text-slate-500"><i data-lucide="eye-off" class="w-3 h-3"></i> ${t.stats_hidden}</span>`}
+                                </div>
+                            ` : ''}
+                            
+                            ${(state.phase === 'result' && showStats && state.selectedStat) ? `
+                                <div class="flex flex-col items-center w-full zoom-in bg-slate-950 rounded-lg p-2 border border-slate-800 shadow-lg">
+                                    <div class="text-[9px] uppercase mb-1.5 font-bold tracking-wider" style="color: ${STAT_COLORS[state.selectedStat]}">${t.stats[state.selectedStat]}</div>
+                                    <div class="w-full h-1.5 bg-slate-800 rounded-full mb-1 overflow-hidden relative shadow-inner">
+                                        <div class="h-full rounded-full relative" style="width: ${weapon.stats[state.selectedStat]}%; background: ${STAT_COLORS[state.selectedStat]}; box-shadow: 0 0 12px ${STAT_COLORS[state.selectedStat]}"></div>
+                                    </div>
+                                    <div class="text-xl font-black text-white drop-shadow-lg tabular-nums">${weapon.stats[state.selectedStat]}</div>
+                                </div>
+                            ` : ''}
+                        </div>
                     </div>
                 </div>`;
         }
@@ -610,26 +741,28 @@
         function renderActiveModal(player, t) {
             const weapon = player.currentCard;
             const statButtons = Object.keys(t.stats).map(key => `
-                <button onclick="selectStat('${key}')" onmouseenter="document.getElementById('stat-desc').innerText = '${t.stat_descriptions[key]}'" onmouseleave="document.getElementById('stat-desc').innerText = 'CHOOSE POWER'" class="py-4 bg-slate-900 text-white border border-slate-700 hover:border-white rounded-xl uppercase text-xs font-bold tracking-widest transition-all hover:scale-105 hover:shadow-xl flex flex-col items-center gap-2 group relative overflow-hidden" style="border-color: ${STAT_COLORS[key]}40">
+                <button onclick="selectStat('${key}')" onmouseenter="document.getElementById('stat-desc').innerText = '${t.stat_descriptions[key]}'" onmouseleave="document.getElementById('stat-desc').innerText = 'INVOKE POWER'" class="py-4 px-2 bg-slate-900/40 text-white border border-slate-700/50 hover:border-white/50 rounded-xl uppercase text-[13px] md:text-xs font-bold tracking-widest transition-all hover:scale-105 hover:bg-slate-800/60 flex flex-col items-center gap-2 group relative overflow-hidden shadow-lg backdrop-blur-sm" style="border-bottom: 2px solid ${STAT_COLORS[key]}60">
                     <div class="absolute inset-0 bg-gradient-to-br from-transparent to-white/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                    <i data-lucide="${getIconForStat(key)}" class="w-6 h-6 transition-colors" style="color: ${STAT_COLORS[key]}"></i>
-                    <span class="relative z-10 transition-colors" style="color: ${STAT_COLORS[key]}">${t.stats[key]}</span>
+                    <div class="p-2 rounded-full bg-slate-950/50 border border-slate-800 group-hover:border-slate-600 transition-colors">
+                        <i data-lucide="${getIconForStat(key)}" class="w-5 h-5 transition-colors" style="color: ${STAT_COLORS[key]}"></i>
+                    </div>
+                    <span class="relative z-10 transition-colors group-hover:text-white text-slate-400" style="color: ${STAT_COLORS[key]}">${t.stats[key]}</span>
                 </button>`).join('');
             
             const selectedKey = state.selectedStat;
             const otherKeys = Object.keys(t.stats).filter(k => k !== selectedKey);
-            const val = weapon.stats[selectedKey];
+            const val = selectedKey ? weapon.stats[selectedKey] : 0;
 
             const selectedStatHTML = `
-                <div class="flex flex-col items-center justify-center p-4 animate-in zoom-in mb-6">
-                    <div class="relative w-40 h-40">
-                        <svg viewBox="0 0 36 36" class="circular-chart w-full h-full drop-shadow-2xl">
-                            <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" style="stroke: #1e293b; stroke-width: 2;" />
-                            <path class="circle" stroke-dasharray="${val}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" style="stroke: ${STAT_COLORS[selectedKey]}; stroke-width: 3; stroke-linecap: round; filter: drop-shadow(0 0 8px ${STAT_COLORS[selectedKey]});" />
+                <div class="flex flex-col items-center justify-center p-4 animate-in zoom-in mb-4">
+                    <div class="relative w-36 h-36 md:w-48 md:h-48">
+                        <svg viewBox="0 0 36 36" class="circular-chart w-full h-full drop-shadow-[0_0_15px_rgba(0,0,0,0.8)]">
+                            <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" style="stroke: #0f172a; stroke-width: 2;" />
+                            <path class="circle" stroke-dasharray="${val}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" style="stroke: ${selectedKey ? STAT_COLORS[selectedKey] : '#334155'}; stroke-width: 2.5; stroke-linecap: round; filter: drop-shadow(0 0 8px ${selectedKey ? STAT_COLORS[selectedKey] : '#000'});" />
                         </svg>
                         <div class="absolute inset-0 flex flex-col items-center justify-center">
-                            <span class="text-4xl font-black text-white drop-shadow-md">${val}</span>
-                            <span class="text-[10px] uppercase font-bold tracking-widest" style="color: ${STAT_COLORS[selectedKey]}">${t.stats[selectedKey]}</span>
+                            <span class="text-5xl font-black text-white drop-shadow-xl counter-anim tracking-tighter">${val}</span>
+                            <span class="text-[13px] uppercase font-bold tracking-[0.2em] mt-1" style="color: ${selectedKey ? STAT_COLORS[selectedKey] : '#64748b'}">${selectedKey ? t.stats[selectedKey] : '...'}</span>
                         </div>
                     </div>
                 </div>`;
@@ -637,87 +770,199 @@
             const otherStatsHTML = otherKeys.map(key => {
                 const otherVal = weapon.stats[key];
                 return `
-                    <div class="flex items-center gap-3 p-2">
-                        <div class="w-8 h-8 rounded bg-slate-900 border border-slate-700 flex items-center justify-center shrink-0">
-                             <i data-lucide="${getIconForStat(key)}" class="w-4 h-4" style="color: ${STAT_COLORS[key]}"></i>
+                    <div class="flex items-center gap-3 p-2 hover:bg-white/5 rounded-lg transition-colors">
+                        <div class="w-7 h-7 rounded-lg bg-slate-900 border border-slate-700 flex items-center justify-center shrink-0 shadow-sm">
+                             <i data-lucide="${getIconForStat(key)}" class="w-3.5 h-3.5" style="color: ${STAT_COLORS[key]}"></i>
                         </div>
                         <div class="flex-1">
                             <div class="flex justify-between mb-1">
-                                <span class="text-[9px] uppercase font-bold text-slate-400">${t.stats[key]}</span>
+                                <span class="text-[9px] uppercase font-bold text-slate-400 tracking-wide">${t.stats[key]}</span>
                                 <span class="text-[9px] font-mono font-bold text-white">${otherVal}</span>
                             </div>
-                            <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
-                                <div class="stat-fill h-full rounded-full" style="--w: ${otherVal}%; background-color: ${STAT_COLORS[key]}; opacity: 0.8;"></div>
+                            <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden shadow-inner">
+                                <div class="stat-fill h-full rounded-full" style="--w: ${otherVal}%; background-color: ${STAT_COLORS[key]}; opacity: 0.9;"></div>
                             </div>
                         </div>
                     </div>`;
             }).join('');
 
             return `
-                <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md fade-in p-4">
-                    <div class="relative w-full max-w-4xl p-1">
-                        <div class="absolute -inset-1 rounded-3xl blur opacity-50 animate-pulse" style="background: ${weapon.color}"></div>
-                        <div class="relative bg-slate-950 rounded-2xl shadow-2xl overflow-hidden flex flex-col border" style="border-color: ${weapon.color}">
-                            <div class="p-4 text-center border-b relative overflow-hidden" style="border-color: ${weapon.color}30; background: linear-gradient(to right, #020617, ${weapon.color}20, #020617)">
-                                <h2 class="text-3xl font-bold text-white font-serif tracking-widest relative z-10">
-                                    ${player.name}<span style="color: ${weapon.color}" class="text-xl ml-2">${t.turn}</span>
-                                </h2>
-                            </div>
-                            <div class="flex flex-col md:flex-row">
-                                <div class="w-full md:w-1/2 min-h-[300px] bg-black relative">
-                                    <img src="https://placehold.co/600x400/0f172a/f59e0b?text=${encodeURIComponent(weapon.name)}&font=playfair-display" class="w-full h-full object-cover opacity-90" style="filter: sepia(30%) hue-rotate(10deg);">
-                                    <div class="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-black/90 to-transparent">
-                                        <div class="text-4xl font-bold font-serif tracking-wide mb-1 leading-tight whitespace-normal" style="color: ${weapon.color}">${weapon.name}</div>
-                                        <div class="text-xl font-hindi text-white/80 mb-1 whitespace-normal">${weapon.name_hi}</div>
-                                        <div class="text-xs text-indigo-100 uppercase font-bold flex items-center gap-2">
-                                            <i data-lucide="sparkles" class="w-3 h-3"></i> ${weapon.deity}
-                                        </div>
-                                    </div>
+                <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-lg fade-in p-4">
+                    <div class="relative w-full max-w-5xl p-1 animate-in zoom-in duration-300">
+                        <div class="absolute -inset-1 rounded-3xl blur-xl opacity-30 animate-pulse" style="background: ${weapon.color}"></div>
+                        <div class="relative bg-slate-950 rounded-2xl shadow-2xl overflow-hidden flex flex-col md:flex-row border border-white/10 max-h-[90vh] md:h-auto overflow-y-auto md:overflow-visible">
+                            
+                            <!-- Card Visual Side -->
+                            <div class="w-full md:w-5/12 min-h-[300px] md:min-h-[550px] relative flex flex-col">
+                                <div class="absolute inset-0">
+                                    ${renderCardArt(weapon)}
                                 </div>
-                                <div class="w-full md:w-1/2 p-6 bg-slate-900 flex flex-col justify-center relative">
-                                    <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/dark-matter.png')] opacity-20 pointer-events-none"></div>
-                                    <div class="relative z-10">
-                                        ${state.phase === 'select' ? `
-                                            <div class="mb-6 bg-slate-800/50 p-4 rounded-xl border border-slate-700/50">
-                                                <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-widest mb-2 pb-2 border-b border-slate-700" style="color: ${weapon.color}">
-                                                    <i data-lucide="scroll-text" class="w-4 h-4"></i> ${t.legend_title}
-                                                </div>
-                                                <p class="text-slate-300 text-sm italic leading-relaxed font-serif">"${weapon.history || weapon.desc}"</p>
-                                                <div class="mt-3 text-[10px] text-red-400 font-bold uppercase flex gap-1"><i data-lucide="shield-alert" class="w-3 h-3"></i> ${t.weak_points}:</div>
-                                                <ul class="text-[10px] text-slate-400 list-disc pl-4 mt-1">
-                                                    ${weapon.weaknesses.map(w => `<li>${w}</li>`).join('')}
-                                                </ul>
+                                <div class="relative z-10 p-8 mt-auto bg-gradient-to-t from-slate-950 via-slate-950/90 to-transparent">
+                                    <div class="text-xs text-indigo-200 uppercase font-bold mb-2 flex items-center gap-2 bg-white/5 w-fit px-2 py-1 rounded-md backdrop-blur-sm border border-white/10">
+                                        <i data-lucide="sparkles" class="w-3 h-3"></i> ${weapon.deity}
+                                    </div>
+                                    <div class="text-4xl font-bold font-serif tracking-wide leading-none text-white mb-2 drop-shadow-lg">${weapon.name}</div>
+                                    <div class="text-xl font-hindi text-white/70 tracking-wide">${weapon.name_hi}</div>
+                                </div>
+                            </div>
+
+                            <!-- Card Stats Side -->
+                            <div class="w-full md:w-7/12 p-6 md:p-8 bg-slate-950/95 flex flex-col justify-center relative border-l border-white/5">
+                                <div class="relative z-10 flex flex-col h-full">
+                                    <div class="flex items-center justify-between mb-6 border-b border-slate-800 pb-4">
+                                        <div>
+                                            <div class="text-xs text-slate-500 uppercase tracking-widest font-bold mb-1">Current Turn</div>
+                                            <h2 class="text-2xl font-bold text-white tracking-wide">${player.name}</h2>
+                                        </div>
+                                        <div class="text-xs text-slate-600 font-mono bg-slate-900 px-2 py-1 rounded border border-slate-800">ID: ${weapon.id.toString().padStart(3, '0')}</div>
+                                    </div>
+
+                                    ${state.phase === 'select' ? `
+                                        <div class="mb-6 bg-slate-900/50 p-5 rounded-xl border border-slate-700/50 backdrop-blur-sm relative overflow-hidden">
+                                            <div class="absolute top-0 right-0 p-2 opacity-10"><i data-lucide="scroll-text" class="w-20 h-20 text-white"></i></div>
+                                            <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-widest mb-3 pb-2 border-b border-slate-700/50 relative z-10" style="color: ${weapon.color}">
+                                                <i data-lucide="book-open" class="w-4 h-4"></i> ${t.legend_title}
                                             </div>
-                                            <div class="h-6 flex items-center justify-center mb-4">
-                                                <p id="stat-desc" class="text-center text-slate-400 text-[10px] uppercase tracking-widest font-bold">CHOOSE POWER</p>
+                                            <p class="text-slate-300 text-sm italic leading-relaxed font-serif relative z-10">"${weapon.history || weapon.desc}"</p>
+                                            
+                                            <div class="mt-4 flex flex-wrap gap-2 relative z-10">
+                                                 ${weapon.weaknesses.map(w => `<span class="px-2 py-1 rounded-md bg-red-900/10 border border-red-500/20 text-[13px] text-red-300/80 flex items-center gap-1"><i data-lucide="shield-alert" class="w-3 h-3"></i> ${w}</span>`).join('')}
                                             </div>
-                                            <div class="grid grid-cols-2 gap-3">
+                                        </div>
+                                        
+                                        <div class="mt-auto">
+                                            <div class="flex items-center gap-4 mb-3">
+                                                <div class="h-px bg-slate-800 flex-1"></div>
+                                                <p id="stat-desc" class="text-center text-slate-500 text-[13px] uppercase tracking-widest font-bold">INVOKE POWER</p>
+                                                <div class="h-px bg-slate-800 flex-1"></div>
+                                            </div>
+                                            <div class="grid grid-cols-3 gap-3">
                                                 ${statButtons}
                                             </div>
-                                        ` : `
-                                            <div class="zoom-in flex flex-col h-full">
-                                                <div class="text-center mb-2">
-                                                    <span class="text-xs text-slate-400 uppercase tracking-widest border-b border-slate-700 pb-1">Power Levels</span>
-                                                </div>
-                                                
-                                                <div class="mb-6">
-                                                    ${selectedStatHTML}
-                                                </div>
-                                                
-                                                <div class="grid grid-cols-2 gap-x-4 gap-y-2 mb-6">
-                                                    ${otherStatsHTML}
-                                                </div>
-
-                                                <button onclick="revealResult()" class="mt-auto w-full py-4 text-white rounded-xl font-bold text-xl uppercase tracking-widest shadow-lg hover:scale-[1.02] transition-transform flex items-center justify-center gap-2" style="background: linear-gradient(135deg, ${weapon.color}, #000); border: 1px solid ${weapon.color}">
-                                                    <i data-lucide="swords" class="w-6 h-6"></i> ${t.clash}
-                                                </button>
+                                        </div>
+                                    ` : `
+                                        <div class="flex-1 flex flex-col">
+                                            <div class="text-center mb-4">
+                                                <span class="text-xs text-slate-500 uppercase tracking-[0.2em] border-b border-slate-800 pb-1">Power Manifestation</span>
                                             </div>
-                                        `}
-                                    </div>
+                                            
+                                            <div class="mb-6 flex justify-center">
+                                                ${selectedStatHTML}
+                                            </div>
+                                            
+                                            <div class="grid grid-cols-2 gap-x-6 gap-y-2 mb-6 bg-slate-900/50 p-4 rounded-xl border border-slate-800 shadow-inner">
+                                                ${otherStatsHTML}
+                                            </div>
+
+                                            <button onclick="revealResult()" class="mt-auto w-full py-4 text-white rounded-xl font-bold text-xl uppercase tracking-widest shadow-xl hover:scale-[1.01] transition-all flex items-center justify-center gap-3 bg-gradient-to-r from-slate-800 to-slate-900 border border-slate-700 hover:border-amber-500/50 group relative overflow-hidden">
+                                                <span class="absolute inset-0 bg-amber-500/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></span>
+                                                <span class="group-hover:text-amber-400 transition-colors relative z-10">${t.clash}</span>
+                                                <i data-lucide="swords" class="w-6 h-6 group-hover:text-amber-400 transition-colors relative z-10 group-hover:rotate-180 duration-500"></i>
+                                            </button>
+                                        </div>
+                                    `}
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>`;
+        }
+        
+        function renderFinal(container, t) {
+            const sorted = [...state.players].sort((a, b) => b.score - a.score);
+            const winner = sorted[0];
+            
+            // Helper to get rank styles
+            const getRankStyle = (idx) => {
+                if (idx === 0) return "bg-gradient-to-r from-yellow-900/40 to-amber-900/20 border-yellow-500/50 shadow-[0_0_20px_rgba(234,179,8,0.1)] scale-[1.02]";
+                if (idx === 1) return "bg-gradient-to-r from-slate-800/60 to-slate-700/30 border-slate-400/50 shadow-[0_0_15px_rgba(148,163,184,0.1)]";
+                if (idx === 2) return "bg-gradient-to-r from-orange-900/30 to-red-900/10 border-orange-700/50 shadow-[0_0_15px_rgba(249,115,22,0.1)]";
+                return "bg-slate-900/40 border-slate-800 hover:bg-slate-800/60";
+            };
+
+            // Helper for rank icons
+            const getRankIcon = (idx) => {
+                if (idx === 0) return `<div class="relative"><i data-lucide="crown" class="w-6 h-6 text-yellow-400 fill-yellow-400/20"></i><div class="absolute inset-0 bg-yellow-400 blur-lg opacity-40"></div></div>`;
+                if (idx === 1) return `<i data-lucide="medal" class="w-6 h-6 text-slate-300"></i>`;
+                if (idx === 2) return `<i data-lucide="medal" class="w-6 h-6 text-orange-400"></i>`;
+                return `<span class="text-slate-600 font-mono font-bold text-lg">#${idx + 1}</span>`;
+            };
+
+            // Unique colors for names
+            const nameColors = [
+                'text-yellow-200', 'text-blue-300', 'text-emerald-300', 'text-purple-300', 
+                'text-pink-300', 'text-orange-300', 'text-cyan-300', 'text-lime-300'
+            ];
+
+            container.innerHTML = `
+                <div class="fixed inset-0 z-50 flex items-center justify-center bg-[#020617] animate-in fade-in duration-700">
+                     <!-- Background Effects -->
+                     <div class="absolute inset-0 overflow-hidden pointer-events-none">
+                        <div class="stars opacity-50"></div>
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-amber-500/10 blur-[120px] rounded-full animate-pulse"></div>
+                     </div>
+
+                     <div class="relative z-10 flex flex-col items-center w-full max-w-5xl h-full md:h-auto md:max-h-[90vh] p-4 md:p-8">
+                        
+                        <!-- Winner Header -->
+                        <div class="text-center mb-10 relative group">
+                            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-yellow-500/30 blur-2xl rounded-full group-hover:bg-yellow-500/40 transition-colors duration-1000"></div>
+                            <div class="mb-6 inline-block animate-bounce relative z-10">
+                                <i data-lucide="crown" class="w-24 h-24 text-yellow-400 fill-yellow-400/20 drop-shadow-[0_0_15px_rgba(250,204,21,0.8)]"></i>
+                            </div>
+                            <h1 class="text-5xl md:text-7xl font-serif font-bold text-transparent bg-clip-text bg-gradient-to-b from-amber-100 via-yellow-300 to-amber-600 mb-3 drop-shadow-2xl tracking-tight">
+                                ${winner.name}
+                            </h1>
+                            <div class="flex items-center justify-center gap-4 text-amber-500/80 font-bold tracking-[0.4em] text-sm md:text-lg uppercase">
+                                <span class="h-px w-12 bg-gradient-to-r from-transparent to-amber-500"></span>
+                                ${t.grand_winner}
+                                <span class="h-px w-12 bg-gradient-to-l from-transparent to-amber-500"></span>
+                            </div>
+                        </div>
+
+                        <!-- Leaderboard List -->
+                        <div class="w-full max-w-3xl flex-1 overflow-y-auto custom-scrollbar pr-2 mb-8 space-y-3 relative z-10">
+                            ${sorted.map((p, idx) => {
+                                const isTop3 = idx < 3;
+                                const nameColor = nameColors[idx % nameColors.length];
+                                
+                                return `
+                                <div class="flex items-center justify-between p-4 rounded-xl border transition-all hover:scale-[1.01] group ${getRankStyle(idx)}">
+                                    <div class="flex items-center gap-6">
+                                        <div class="w-10 flex justify-center shrink-0">
+                                            ${getRankIcon(idx)}
+                                        </div>
+                                        <div class="flex flex-col">
+                                            <span class="text-lg md:text-xl font-bold ${isTop3 ? 'text-white' : 'text-slate-300'} ${isTop3 ? '' : nameColor} tracking-wide">
+                                                ${p.name}
+                                            </span>
+                                            ${isTop3 ? `<span class="text-[13px] uppercase tracking-widest opacity-60 ${idx===0 ? 'text-yellow-200' : 'text-slate-400'}">Rank ${idx+1}</span>` : ''}
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex items-center gap-4">
+                                        <div class="text-right">
+                                            <div class="text-2xl font-mono font-bold ${idx === 0 ? 'text-yellow-400' : 'text-white'} drop-shadow-sm">
+                                                ${p.score} <span class="text-xs opacity-50 font-sans">${t.points}</span>
+                                            </div>
+                                        </div>
+                                        <button onclick="setViewingPlayer(${p.id})" class="p-2.5 rounded-lg bg-slate-950/50 border border-white/5 text-slate-400 hover:text-white hover:bg-indigo-500/20 hover:border-indigo-500/50 transition-all" title="${t.view_arsenal}">
+                                            <i data-lucide="eye" class="w-5 h-5"></i>
+                                        </button>
+                                    </div>
+                                </div>`;
+                            }).join('')}
+                        </div>
+
+                        <!-- Footer Buttons -->
+                        <button onclick="startWar()" class="group relative px-10 py-4 bg-gradient-to-r from-amber-600 to-orange-700 hover:from-amber-500 hover:to-orange-600 text-white font-bold text-lg uppercase tracking-widest rounded-full shadow-[0_0_30px_rgba(245,158,11,0.3)] hover:shadow-[0_0_50px_rgba(245,158,11,0.5)] transition-all transform hover:scale-105 border border-white/10">
+                            <span class="absolute inset-0 rounded-full bg-white/20 blur opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
+                            <div class="flex items-center gap-3 relative z-10">
+                                <i data-lucide="refresh-cw" class="w-5 h-5 group-hover:rotate-180 transition-transform duration-700"></i>
+                                ${t.reincarnate}
+                            </div>
+                        </button>
+                     </div>
                 </div>`;
         }
         
@@ -733,40 +978,73 @@
                             </div>
                             <button onclick="setViewingPlayer(null)" class="p-2 hover:bg-slate-800 rounded-full text-slate-400 hover:text-white transition-colors"><i data-lucide="x" class="w-6 h-6"></i></button>
                          </div>
-                         <div class="flex-1 overflow-y-auto custom-scrollbar p-6 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-fixed">
-                            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                         <div class="flex-1 overflow-y-auto custom-scrollbar p-6 bg-slate-950 relative">
+                            <div class="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] pointer-events-none"></div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10">
                                 ${player.usedWeapons.map((weapon, i) => {
                                     const avgPower = getAvg(weapon.stats);
                                     return `<div class="bg-slate-900/90 backdrop-blur-sm border rounded-xl overflow-hidden flex flex-col shadow-xl transition-all hover:scale-[1.01] hover:shadow-2xl" style="border-color: ${weapon.color}60">
-                                        <div class="h-32 bg-black relative group overflow-hidden">
-                                            <img src="${getWeaponImageUrl(weapon.name)}" class="w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-500">
-                                            <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent"></div>
-                                            <div class="absolute top-3 left-3"><span class="px-2 py-1 rounded text-[10px] font-bold bg-black/50 border border-white/10 backdrop-blur text-white">ROUND ${i+1}</span></div>
-                                            <div class="absolute bottom-3 left-4 right-4">
-                                                <div class="text-xl font-bold font-serif truncate drop-shadow-md" style="color: ${weapon.color}">${weapon.name}</div>
-                                                <div class="text-[10px] uppercase tracking-widest text-slate-300 flex items-center gap-1"><i data-lucide="sparkles" class="w-3 h-3" style="color: ${weapon.color}"></i> ${weapon.deity}</div>
+                                            <!-- Header Image -->
+
+                                            <div class="h-80 bg-black relative group overflow-hidden">
+                                                <div class="absolute inset-0">${renderCardArt(weapon, true)}</div>
+                                                <div class="absolute bottom-3 left-3 z-10"><span class="px-2 py-1 rounded text-[13px] font-bold bg-black/50 border border-white/10 backdrop-blur text-white">ROUND ${i+1}</span></div>
+                                                <div class="absolute top-3 left-4 right-4 z-10">
+                                                    <div class="text-lg font-bold font-serif truncate drop-shadow-md text-white">${weapon.name}</div>
+                                                    <div class="text-[13px] font-hindi text-slate-400">${weapon.name_hi}</div>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="p-5 flex-1 flex flex-col gap-5">
-                                            <div class="flex items-start gap-4">
-                                                <div class="flex flex-col items-center gap-1">
-                                                    <div class="relative w-16 h-16">
-                                                        <svg viewBox="0 0 36 36" class="circular-chart w-full h-full">
-                                                            <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                                                            <path class="circle" stroke-dasharray="${avgPower}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" style="stroke: ${weapon.color};" />
-                                                        </svg>
-                                                        <div class="absolute inset-0 flex items-center justify-center text-sm font-bold text-white">${avgPower}</div>
+                                            
+                                            <div class="p-4 flex-1 flex flex-col gap-3">
+                                                <!-- Top Details -->
+                                                <div class="flex justify-between items-center border-b border-white/5 pb-2">
+                                                    <div class="flex items-center gap-1.5 text-[13px] font-bold text-indigo-300 uppercase tracking-wide">
+                                                        <i data-lucide="sparkles" class="w-3 h-3"></i> ${weapon.deity}
                                                     </div>
-                                                    <span class="text-[9px] uppercase font-bold text-slate-500">Avg Power</span>
+                                                    <div class="text-[13px] font-bold text-amber-500 uppercase tracking-wide">${weapon.specialty}</div>
                                                 </div>
-                                                <div class="flex-1 min-w-0">
-                                                    <div class="text-[10px] uppercase font-bold text-red-400 mb-1 flex items-center gap-1"><i data-lucide="shield-alert" class="w-3 h-3"></i> ${t.weak_points}</div>
-                                                    <ul class="text-[10px] text-slate-400 space-y-1">${weapon.weaknesses.map(w => `<li class="flex items-start gap-1"><span class="text-red-500/50 mt-0.5">•</span> <span class="line-clamp-1">${w}</span></li>`).join('')}</ul>
+
+                                                <!-- Description -->
+                                                <div class="text-[13px] text-slate-400 italic leading-relaxed border-l-2 border-slate-700 pl-2 line-clamp-2" title="${weapon.desc}">
+                                                    "${weapon.desc}"
+                                                </div>
+
+                                                <div class="flex gap-4 py-2">
+                                                    <!-- Circle Chart -->
+                                                    <div class="flex flex-col items-center gap-1">
+                                                        <div class="relative w-14 h-14">
+                                                            <svg viewBox="0 0 36 36" class="circular-chart w-full h-full">
+                                                                <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                                                <path class="circle" stroke-dasharray="${avgPower}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" style="stroke: ${weapon.color};" />
+                                                            </svg>
+                                                            <div class="absolute inset-0 flex items-center justify-center text-xs font-bold text-white">${avgPower}</div>
+                                                        </div>
+                                                        <span class="text-[9px] uppercase font-bold text-slate-500">Avg Power</span>
+                                                    </div>
+                                                    
+                                                    <!-- Stats Bars (Showing ALL stats now) -->
+                                                    <div class="flex-1 space-y-1">
+                                                        ${Object.keys(weapon.stats).map(k => `<div class="flex items-center gap-2"><div class="w-14 text-[9px] uppercase font-bold text-slate-500 truncate">${t.stats[k]}</div><div class="flex-1 h-1 bg-slate-800 rounded-full overflow-hidden"><div class="stat-fill h-full rounded-full" style="--w: ${weapon.stats[k]}%; background-color: ${STAT_COLORS[k]};"></div></div><div class="w-5 text-[9px] font-mono text-right text-slate-400">${weapon.stats[k]}</div></div>`).join('')}
+                                                    </div>
+                                                </div>
+
+                                                <!-- Footer Details (History & Weakness) -->
+                                                <div class="bg-slate-950/50 rounded-lg p-3 border border-white/5 space-y-2 text-[13px]">
+                                                    <div class="flex gap-2">
+                                                        <i data-lucide="scroll-text" class="w-3 h-3 text-slate-500 flex-shrink-0 mt-0.5"></i>
+                                                        <span class="text-slate-300 line-clamp-2" title="${weapon.history}"><span class="text-amber-500/80 font-bold">History:</span> ${weapon.history}</span>
+                                                    </div>
+                                                    <div class="flex gap-2 items-start">
+                                                        <i data-lucide="shield-alert" class="w-3 h-3 text-red-400 flex-shrink-0 mt-0.5"></i>
+                                                        <div class="flex-1">
+                                                            <span class="text-red-400/80 font-bold block mb-1">Weaknesses:</span>
+                                                            <div class="flex flex-wrap gap-1">
+                                                                ${weapon.weaknesses.map(w => `<span class="px-1.5 py-0.5 bg-red-500/10 border border-red-500/20 rounded text-red-300 line-clamp-1">${w}</span>`).join('')}
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div class="space-y-2">${Object.keys(weapon.stats).map(k => `<div class="flex items-center gap-2"><div class="w-16 text-[9px] uppercase font-bold text-slate-500 text-right truncate">${t.stats[k]}</div><div class="flex-1 h-2 bg-slate-800 rounded-full overflow-hidden relative"><div class="stat-fill h-full rounded-full relative z-10" style="--w: ${weapon.stats[k]}%; background-color: ${STAT_COLORS[k]}; box-shadow: 0 0 8px ${STAT_COLORS[k]}60"></div><div class="absolute inset-0 bg-white/5 w-full h-full"></div></div><div class="w-6 text-[10px] font-mono font-bold text-right text-slate-300">${weapon.stats[k]}</div></div>`).join('')}</div>
-                                            <div class="mt-auto pt-3 border-t border-slate-800/50"><p class="text-[10px] italic text-slate-400 leading-relaxed line-clamp-2"><span class="text-amber-500 not-italic font-bold mr-1">${t.legend_title}:</span>"${weapon.history}"</p></div>
-                                        </div>
                                     </div>`;
                                 }).join('')}
                             </div>
@@ -775,36 +1053,75 @@
                 </div>`;
         }
 
-        function renderFinal(container, t) {
-            const sorted = [...state.players].sort((a, b) => b.score - a.score);
-            const winner = sorted[0];
-            container.innerHTML = `
-                <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-lg zoom-in">
-                     <div class="absolute inset-0 overflow-hidden pointer-events-none">${Array.from({length: 20}).map(() => `<div class="blast-particle bg-amber-500 w-2 h-2 rounded-full" style="left: ${50 + (Math.random() - 0.5)*50}%; top: ${50 + (Math.random() - 0.5)*50}%; --tx: ${(Math.random()-0.5)*500}px; --ty: ${(Math.random()-0.5)*500}px;"></div>`).join('')}</div>
-                     <div class="relative z-10 flex flex-col items-center max-w-4xl w-full p-8 text-center h-full overflow-y-auto">
-                        <div class="mb-4 animate-bounce"><i data-lucide="crown" class="w-20 h-20 text-yellow-400 drop-shadow-lg"></i></div>
-                        <h1 class="text-5xl md:text-7xl font-serif font-bold text-transparent bg-clip-text bg-gradient-to-b from-yellow-200 to-yellow-600 mb-2 drop-shadow-xl">${winner.name}</h1>
-                        <div class="text-xl text-yellow-200 uppercase tracking-[0.5em] font-bold mb-8">${t.grand_winner}</div>
-                        <div class="w-full bg-slate-900/80 border border-yellow-500/30 rounded-2xl p-6 mb-8 shadow-2xl flex-1 overflow-y-auto custom-scrollbar">
-                            ${sorted.map((p, idx) => `<div class="flex items-center justify-between p-4 rounded-xl mb-2 ${idx === 0 ? 'bg-yellow-900/30 border border-yellow-500/50' : 'bg-slate-800/50 border border-slate-700'}"><div class="flex items-center gap-4"><span class="text-xl font-bold ${idx === 0 ? 'text-yellow-400' : 'text-slate-500'}">#${idx + 1}</span><span class="text-lg font-bold ${idx === 0 ? 'text-white' : 'text-slate-300'}">${p.name}</span></div><div class="flex items-center gap-4"><div class="text-xl font-mono font-bold text-amber-400">${p.score} ${t.points}</div><button onclick="setViewingPlayer(${p.id})" class="p-2 rounded-full bg-slate-800 hover:bg-indigo-600 text-slate-400 hover:text-white transition-colors" title="${t.view_arsenal}"><i data-lucide="eye" class="w-4 h-4"></i></button></div></div>`).join('')}
-                        </div>
-                        <button onclick="startWar()" class="px-12 py-4 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white font-bold text-xl uppercase tracking-widest rounded-full shadow-lg hover:scale-105 transition-all">${t.reincarnate}</button>
-                     </div>
-                </div>`;
-        }
+        // Add listener for slider
+        document.getElementById('volume-slider').addEventListener('input', (e) => {
+            updateVolume(e.target.value);
+        });
 
+        // --- EVENT LISTENERS ---
+        
+        // Rules Modal
         document.getElementById('rules-btn').onclick = () => {
-            document.getElementById('modal-container').innerHTML = `<div class="fixed inset-0 z-[60] flex items-center justify-center bg-black/90 backdrop-blur-sm fade-in"><div class="relative w-full max-w-lg bg-slate-950 rounded-2xl border border-amber-500/30 shadow-2xl p-6 m-4"><button onclick="document.getElementById('modal-container').innerHTML=''" class="absolute top-4 right-4 text-slate-500 hover:text-white"><i data-lucide="x"></i></button><h2 class="text-2xl font-bold text-amber-400 mb-6 flex items-center gap-2 font-serif"><i data-lucide="book-open"></i> ${getT().instructions}</h2><ul class="space-y-4 text-slate-300 text-sm list-disc pl-5">${getT().rule_list.map(r => `<li>${r}</li>`).join('')}</ul></div></div>`;
+            const t = getT();
+            document.getElementById('modal-container').innerHTML = `
+                <div class="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 backdrop-blur-sm fade-in p-4">
+                    <div class="relative w-full max-w-lg bg-slate-900 rounded-2xl border border-amber-500/30 shadow-2xl p-6 overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-amber-500/50 to-transparent"></div>
+                        <button onclick="document.getElementById('modal-container').innerHTML=''" class="absolute top-4 right-4 text-slate-500 hover:text-white transition-colors"><i data-lucide="x" class="w-5 h-5"></i></button>
+                        <h2 class="text-2xl font-bold text-amber-400 mb-6 flex items-center gap-3 font-serif">
+                            <i data-lucide="book-open" class="w-6 h-6"></i> ${t.instructions}
+                        </h2>
+                        <ul class="space-y-3 text-slate-300 text-sm list-disc pl-5 marker:text-amber-500/50 leading-relaxed">
+                            ${t.rule_list.map(r => `<li>${r}</li>`).join('')}
+                        </ul>
+                    </div>
+                </div>`;
             lucide.createIcons();
         };
+
+        // Ranking Modal
         document.getElementById('ranking-btn').onclick = () => {
+            const t = getT();
             const sorted = [...state.players].sort((a, b) => b.score - a.score);
-            document.getElementById('modal-container').innerHTML = `<div class="fixed inset-0 z-[60] flex items-center justify-center bg-black/90 backdrop-blur-sm fade-in"><div class="relative w-full max-w-lg bg-slate-950 rounded-2xl border border-indigo-500/30 shadow-2xl p-6 m-4 max-h-[80vh] flex flex-col"><button onclick="document.getElementById('modal-container').innerHTML=''" class="absolute top-4 right-4 text-slate-500 hover:text-white"><i data-lucide="x"></i></button><h2 class="text-2xl font-bold text-indigo-400 mb-6 flex items-center gap-2 font-serif"><i data-lucide="bar-chart-3"></i> ${getT().current_standings}</h2><div class="overflow-y-auto custom-scrollbar flex-1 pr-2 space-y-3">${sorted.map((p, idx) => `<div class="flex items-center justify-between p-3 rounded-xl border ${idx===0 ? 'bg-indigo-900/20 border-indigo-500' : 'bg-slate-900 border-slate-800'}"><span class="font-bold text-slate-300">#${idx+1} ${p.name}</span><span class="font-mono font-bold text-white">${p.score}</span></div>`).join('')}</div></div></div>`;
+            document.getElementById('modal-container').innerHTML = `
+                <div class="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 backdrop-blur-sm fade-in p-4">
+                    <div class="relative w-full max-w-md bg-slate-900 rounded-2xl border border-indigo-500/30 shadow-2xl p-6 flex flex-col max-h-[80vh]">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-indigo-500/50 to-transparent"></div>
+                        <button onclick="document.getElementById('modal-container').innerHTML=''" class="absolute top-4 right-4 text-slate-500 hover:text-white transition-colors"><i data-lucide="x" class="w-5 h-5"></i></button>
+                        <h2 class="text-2xl font-bold text-indigo-400 mb-6 flex items-center gap-3 font-serif">
+                            <i data-lucide="bar-chart-3" class="w-6 h-6"></i> ${t.current_standings}
+                        </h2>
+                        <div class="overflow-y-auto custom-scrollbar flex-1 pr-2 space-y-3">
+                            ${sorted.map((p, idx) => `
+                                <div class="flex items-center justify-between p-3 rounded-xl border ${idx===0 ? 'bg-indigo-900/20 border-indigo-500/50' : 'bg-slate-800/50 border-slate-700/50'}">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${idx===0 ? 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/20' : 'bg-slate-800 text-slate-400'}">
+                                            ${idx + 1}
+                                        </div>
+                                        <span class="font-bold ${idx===0 ? 'text-white' : 'text-slate-300'}">${p.name}</span>
+                                    </div>
+                                    <span class="font-mono font-bold text-indigo-200">${p.score} ${t.points}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>`;
             lucide.createIcons();
         };
+
+        // Sound Toggle
         document.getElementById('sound-btn').onclick = toggleSound;
-        document.getElementById('lang-select').onchange = (e) => { state.lang = e.target.value; render(); };
-        render();
+        
+        // Language Selector
+        document.getElementById('lang-select').onchange = (e) => { 
+            state.lang = e.target.value; 
+            render(); 
+        };
+
+        // Initial setup
+        updateSoundIcon();
+        render(); // Initialize the game
+
     </script>
 </body>
 </html>
